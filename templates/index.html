@@ -1,0 +1,58 @@
+<html>
+<head>
+    <title> Simple web app to draw </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+<center>
+<h3> This is the page for drawing lines </h3>
+
+<canvas id="board" width="1366" height="768" style="border: 1px solid black;">
+
+</canvas>
+</center>
+
+
+</body>
+
+<script>
+    var lineTo = [];
+
+    $(document).ready(function() {
+      var canvas = $("#board").get(0);
+      if (!canvas.getContext) {
+        return;
+      }
+      var ctx = canvas.getContext("2d");
+      ctx.lineWidth = 1;
+
+      var drawChart = function(x, y) {
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+      };
+
+      $("#board").on("click", function(e) {
+        var offset = $(this).offset();
+        var x = e.pageX - offset.left;
+        var y = e.pageY - offset.top;
+
+        drawChart(x, y);
+
+        if (lineTo.length > 0) {
+          var last = lineTo[lineTo.length - 1];
+          ctx.beginPath();
+          ctx.moveTo(last.x, last.y);
+          ctx.lineTo(x, y);
+          ctx.strokeStyle = "blue";
+          ctx.stroke();
+        }
+
+        lineTo.push({ x: x, y: y });
+      });
+    });
+</script>
+
+</html>
