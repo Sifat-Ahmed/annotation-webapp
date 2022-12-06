@@ -11,5 +11,5 @@ def index_page():
 
 
 if __name__ == '__main__':
-    app.run(port=8000)
+    app.run(debug=True, port=5555)
 
