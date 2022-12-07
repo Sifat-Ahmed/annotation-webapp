@@ -83,9 +83,13 @@
             <!-- content -->
             <div class="row">
                 <h3> This is the page for drawing lines </h3>
+                <div class="container">
+                    <canvas id="canvas" width="1080px" height="720px" style="border: 1px solid black;"></canvas>
+                </div>
             </div>
-            <div class="row">
-                <canvas id="canvas" width="640px" height="480px" style="border: 1px solid black;"></canvas>
+            <div>
+
+
             </div>
 
 
@@ -97,7 +101,6 @@
 <script src="{{url_for('static', filename='scripts/line.js')}}"></script>
 <script src="{{url_for('static', filename='scripts/bootstrap/bootstrap.js')}}"></script>
 <!-- <script src="{{url_for('static', filename='scripts/actions.js')}}"></script>
-
 <button id="dragBtn" >Drag</button>
 <button id="pntBtn">Point</button>
 -->
