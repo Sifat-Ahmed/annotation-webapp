@@ -23,6 +23,7 @@ var startX,startY;
 var nearest = false;
 var isDown=false;
 var lines=[];
+var all_points = [];
 
 $("#canvas").on("click", function(e){handleMouseClick(e);});
 $("#pntBtn").on("click", function(e){pointBtnClicked(e);});
@@ -55,12 +56,27 @@ function drawLine(line,color){
     ctx.stroke();
 }
 
+var drawChart = function(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.strokeStyle = "red";
+    ctx.stroke();
+};
+
 function draw(){
     ctx.clearRect(0,0,cw,ch);
     // draw all lines at their current positions
     for(var i=0;i<lines.length;i++){
         drawLine(lines[i],'black');
     }
+
+
+//    for (var i=0; i < all_points.length; i++){
+//        console.log('lines' + lines[i].x0);
+//        drawChart(lines[i].x0, lines[i].y0);
+//        drawChart(lines[i].x1, lines[i].y1);
+//    }
+
     // draw markers if a line is being dragged
     if(nearest){
         // point on line nearest to mouse
@@ -119,7 +135,18 @@ function handleMouseClick(e){
     if (is_drawing_point){
         pointDrawing(e);
     }
+    if (is_dragging_line){
+        selectLine(e);
+    }
 
+    draw();
+}
+
+function selectLine(e){
+    var x = e.pageX - offsetX;
+    var y = e.pageY - offsetY;
+
+    nearest=closestLine(x,y);
     draw();
 }
 
@@ -127,6 +154,8 @@ function pointDrawing(e){
     var x = e.pageX - offsetX;
     var y = e.pageY - offsetY;
     single_line.push({xc: x, yc: y})
+
+    all_points.push({xc:x, yc: y});
 
     if (single_line.length == 2)
     {
