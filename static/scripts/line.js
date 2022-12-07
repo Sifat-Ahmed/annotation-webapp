@@ -6,6 +6,17 @@ var count_click = 0;
 var is_drawing_point = false;
 var is_dragging_line = false;
 
+var img = new Image();
+img.src = "/upload";
+
+// it can't draw it at once. it has to wait till image is loaded
+//ctx.drawImage(img, 0, 0);
+
+img.onload = function() {
+   img.style.display = 'none'; // I don't know why they hide it
+   ctx.drawImage(img, 0, 0);   // draw on canvas
+};
+
 
 function reOffset(){
     var BB=canvas.getBoundingClientRect();
@@ -87,7 +98,7 @@ function draw(){
         // marker for original line before dragging
         drawLine(nearest.originalLine,'red');
         // hightlight the line as its dragged
-        drawLine(nearest.line,'red');
+        drawLine(nearest.line,'blue');
     }
 
 }
