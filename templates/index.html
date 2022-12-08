@@ -71,8 +71,12 @@
 
             </div>
 
+                <img src="{{ url_for('static', filename='UPLOADS/images/'+image['name']) }}">
 
-        </div>
+                <form action="/annotate/{{image['id']+1}}"  method=post>
+                    <input type="submit" value="next" />
+                </form>
+            </div>
     </div>
 </div>
 

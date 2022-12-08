@@ -5,10 +5,6 @@
     <title>Title</title>
 </head>
 <body>
-  <img src="{{ url_for('static', filename='UPLOADS/'+image['name']) }}">
 
-    <form action="/show/{{image['id']+1}}"  method=post>
-        <input type="submit" value="Display Image" />
-    </form>
 </body>
 </html>

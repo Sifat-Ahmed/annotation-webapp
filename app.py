@@ -1,18 +1,18 @@
 ## first importing the necessary files
 from flask import Flask, render_template, flash, request, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
-import os, cv2
-UPLOAD_FOLDER = 'static/UPLOADS'
+import os
+from export_video import save_video
+
+
+VIDEO_FOLDER = 'static/UPLOADS/videos'
+IMAGE_FOLDER = 'static/UPLOADS/images'
 ## creating an app reference for flask
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_VIDEO_FOLDER'] = VIDEO_FOLDER
+app.config['UPLOAD_IMAGE_FOLDER'] = IMAGE_FOLDER
 
-## now adding a route to the application
-@app.route('/')
-def index_page():
-    return render_template('index.html', my_name='Testing')
-
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -27,22 +27,23 @@ def upload():
             return redirect(request.url)
         if file:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(app.config['UPLOAD_VIDEO_FOLDER'], filename))
+            save_video(os.path.join(app.config['UPLOAD_VIDEO_FOLDER'], filename), app.config['UPLOAD_IMAGE_FOLDER'])
             image = dict()
             image['id'] = 1
-            image['name'] = filename
-            return render_template('view.html', image=image)
+            image['name'] = str(image['id']) + '.jpg'
+            return render_template('index.html', image=image)
             #return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename),  mimetype='image/png')
             #return redirect(url_for('show', file='1'), code=307)
             #return redirect(request.url)
     return render_template('upload.html')
 
-@app.route('/show/<file>', methods=['POST'])
+@app.route('/annotate/<file>', methods=['POST'])
 def show(file):
     image = dict()
     image['id'] = int(file)
-    image['name'] =  str(file)+'.jpg'
-    return render_template('view.html', image=image)
+    image['name'] = str(file)+'.jpg'
+    return render_template('index.html', image=image)
 
 
 
