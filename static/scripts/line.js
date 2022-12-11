@@ -1,22 +1,24 @@
 var canvas=document.getElementById("canvas");
 var ctx=canvas.getContext("2d");
-var cw=canvas.width;
-var ch=canvas.height;
 var count_click = 0;
 var is_drawing_point = false;
 var is_dragging_line = false;
 
-var img = new Image();
-img.src = "/upload";
-
+var img = document.getElementById('baseImg');
 // it can't draw it at once. it has to wait till image is loaded
 //ctx.drawImage(img, 0, 0);
+img.onload=function(){
+        const imageWidth = img.width;
+        const imageHeight = img.height;
+    // rescaling the canvas element
+        canvas.width = imageWidth;
+        canvas.height = imageHeight;
 
-img.onload = function() {
-   img.style.display = 'none'; // I don't know why they hide it
-   ctx.drawImage(img, 0, 0);   // draw on canvas
-};
+        ctx.drawImage(img, 0, 0, imageWidth, imageHeight);
+    }
 
+const cw=img.width;
+const ch=img.height;
 
 function reOffset(){
     var BB=canvas.getBoundingClientRect();
@@ -43,7 +45,7 @@ $("#canvas").mousedown(function(e){handleMouseDown(e);});
 $("#canvas").mousemove(function(e){handleMouseMove(e);});
 $("#canvas").mouseup(function(e){handleMouseUpOut(e);});
 $("#canvas").mouseout(function(e){handleMouseUpOut(e);});
-
+var lineShow = document.getElementById('showLine');
 
 function pointBtnClicked(e){
     is_drawing_point = true;
@@ -61,6 +63,7 @@ draw();
 
 function drawLine(line,color){
     ctx.beginPath();
+    ctx.lineWidth = 5;
     ctx.moveTo(line.x0,line.y0);
     ctx.lineTo(line.x1,line.y1);
     ctx.strokeStyle=color;
@@ -76,9 +79,12 @@ var drawChart = function(x, y) {
 
 function draw(){
     ctx.clearRect(0,0,cw,ch);
+    ctx.drawImage(img, 0, 0, cw, ch);
     // draw all lines at their current positions
     for(var i=0;i<lines.length;i++){
         drawLine(lines[i],'black');
+        drawChart(lines[i].x0,lines[i].y0);
+        drawChart(lines[i].x1,lines[i].y1);
     }
 
 
@@ -100,6 +106,7 @@ function draw(){
         // hightlight the line as its dragged
         drawLine(nearest.line,'blue');
     }
+
 
 }
 
@@ -158,6 +165,7 @@ function selectLine(e){
     var y = e.pageY - offsetY;
 
     nearest=closestLine(x,y);
+    lineShow.value = nearest.originalLine.x0 + ';' + nearest.originalLine.y0 + ';' + nearest.originalLine.x1 + ';' + nearest.originalLine.y1 + ';';
     draw();
 }
 
@@ -176,7 +184,7 @@ function pointDrawing(e){
             x1: single_line[1].xc,
             y1: single_line[1].yc
         })
-        console.log(single_line);
+        //console.log(single_line);
         single_line = [];
     }
 

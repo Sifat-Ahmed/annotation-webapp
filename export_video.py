@@ -11,3 +11,4 @@ def save_video(path_to_read, path_to_write):
             count += 1
         else:
             break
+    return count
