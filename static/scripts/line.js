@@ -97,10 +97,10 @@ function draw(){
     // draw markers if a line is being dragged
     if(nearest){
         // point on line nearest to mouse
-        ctx.beginPath();
-        ctx.arc(nearest.pt.x,nearest.pt.y,5,0,Math.PI*2);
-        ctx.strokeStyle='red';
-        ctx.stroke();
+//        ctx.beginPath();
+//        ctx.arc(nearest.pt.x,nearest.pt.y,5,0,Math.PI*2);
+//        ctx.strokeStyle='red';
+//        ctx.stroke();
         // marker for original line before dragging
         drawLine(nearest.originalLine,'red');
         // hightlight the line as its dragged
