@@ -4,6 +4,7 @@ var count_click = 0;
 var is_drawing_point = false;
 var is_dragging_line = false;
 
+
 var img = document.getElementById('baseImg');
 // it can't draw it at once. it has to wait till image is loaded
 //ctx.drawImage(img, 0, 0);
@@ -25,6 +26,8 @@ function reOffset(){
     offsetX=BB.left;
     offsetY=BB.top;
 }
+
+
 var offsetX,offsetY;
 reOffset();
 window.onscroll=function(e){ reOffset(); }
@@ -37,10 +40,13 @@ var nearest = false;
 var isDown=false;
 var lines=[];
 var all_points = [];
+var selected_line = -1;
+
 
 $("#canvas").on("click", function(e){handleMouseClick(e);});
 $("#pntBtn").on("click", function(e){pointBtnClicked(e);});
 $("#dragBtn").on("click", function(e){dragBtnClicked(e);});
+$("#delBtn").on("click", function(e){deleteBtnClicked(e);});
 $("#canvas").mousedown(function(e){handleMouseDown(e);});
 $("#canvas").mousemove(function(e){handleMouseMove(e);});
 $("#canvas").mouseup(function(e){handleMouseUpOut(e);});
@@ -57,6 +63,16 @@ function dragBtnClicked(e){
     is_dragging_line = true;
     is_drawing_point = false;
     console.log('Switching to dragging')
+}
+
+function deleteBtnClicked(e){
+    if (selected_line != -1){
+        lines.splice(selected_line, 1);
+        draw();
+        alert("Line removed!")
+    }else{
+    alert("Select a line first!")
+    }
 }
 
 draw();
@@ -83,8 +99,11 @@ function draw(){
     // draw all lines at their current positions
     for(var i=0;i<lines.length;i++){
         drawLine(lines[i],'black');
-        drawChart(lines[i].x0,lines[i].y0);
-        drawChart(lines[i].x1,lines[i].y1);
+
+        //drawChart(lines[i].x0,lines[i].y0);
+        //drawChart(lines[i].x1,lines[i].y1);
+
+
     }
 
 
@@ -103,8 +122,12 @@ function draw(){
 //        ctx.stroke();
         // marker for original line before dragging
         drawLine(nearest.originalLine,'red');
+        drawChart(nearest.originalLine.x0, nearest.originalLine.y0);
+        drawChart(nearest.originalLine.x1, nearest.originalLine.y1);
         // hightlight the line as its dragged
         drawLine(nearest.line,'blue');
+        //drawChart(nearest.line, nearest.line.y0);
+        //drawChart(nearest.line.x1, nearest.line.y1);
     }
 
 
@@ -128,7 +151,7 @@ function closestLine(mx,my){
         }
     }
     var line=lines[index];
-    return({ pt:pt, line:line, originalLine:{x0:line.x0,y0:line.y0,x1:line.x1,y1:line.y1} });
+    return({ pt:pt, line:line, originalLine:{x0:line.x0,y0:line.y0,x1:line.x1,y1:line.y1}, index:index });
 }
 
 // linear interpolation -- needed in setClosestLine()
@@ -165,7 +188,7 @@ function selectLine(e){
     var y = e.pageY - offsetY;
 
     nearest=closestLine(x,y);
-    lineShow.value = nearest.originalLine.x0 + ';' + nearest.originalLine.y0 + ';' + nearest.originalLine.x1 + ';' + nearest.originalLine.y1 + ';';
+    lineShow.innerHTML = Math.floor(nearest.originalLine.x0) + ', ' + Math.floor(nearest.originalLine.y0) + ' ; ' + Math.floor(nearest.originalLine.x1) + ', ' + Math.floor(nearest.originalLine.y1);
     draw();
 }
 
@@ -200,7 +223,7 @@ function handleMouseDown(e){
       startY=parseInt(e.clientY-offsetY);
       // find nearest line to mouse
       nearest=closestLine(startX,startY);
-
+      selected_line = nearest.index;
       console.log(nearest);
       console.log(lines);
 
@@ -217,7 +240,7 @@ function handleMouseUpOut(e){
       e.stopPropagation();
       // clear dragging flag
       isDown=false;
-      nearest=null;
+      //nearest=null;
       draw();
   }
 }
