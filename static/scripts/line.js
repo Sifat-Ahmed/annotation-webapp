@@ -26,8 +26,6 @@ function reOffset(){
     offsetX=BB.left;
     offsetY=BB.top;
 }
-
-
 var offsetX,offsetY;
 reOffset();
 window.onscroll=function(e){ reOffset(); }
@@ -68,15 +66,13 @@ function dragBtnClicked(e){
 function deleteBtnClicked(e){
     if (selected_line != -1){
         lines.splice(selected_line, 1);
+        nearest = null;
         draw();
         alert("Line removed!")
     }else{
     alert("Select a line first!")
     }
 }
-
-draw();
-
 function drawLine(line,color){
     ctx.beginPath();
     ctx.lineWidth = 5;
@@ -129,7 +125,6 @@ function draw(){
         //drawChart(nearest.line, nearest.line.y0);
         //drawChart(nearest.line.x1, nearest.line.y1);
     }
-
 
 }
 
@@ -196,6 +191,7 @@ function pointDrawing(e){
     var x = e.pageX - offsetX;
     var y = e.pageY - offsetY;
     single_line.push({xc: x, yc: y})
+
 
     all_points.push({xc:x, yc: y});
 
@@ -291,3 +287,5 @@ function handleMouseMove(e){
 
     }
 }
+
+setInterval(draw, 10);
