@@ -41,7 +41,7 @@ def upload():
             #return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename),  mimetype='image/png')
             #return redirect(url_for('show', image=image), code=307)
             #return redirect(request.url)
-    return render_template('upload.html')
+    return render_template('sidebar.html')
 
 @app.route('/annotate/<file>', methods=['POST'])
 def show(file):

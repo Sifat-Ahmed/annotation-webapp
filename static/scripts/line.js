@@ -287,5 +287,3 @@ function handleMouseMove(e){
 
     }
 }
-
-setInterval(draw, 10);
