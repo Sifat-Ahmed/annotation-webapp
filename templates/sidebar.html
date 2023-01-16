@@ -5,9 +5,9 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
-    <style>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
 
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -94,7 +94,6 @@
         <div class="col-md-4">
             <div class="row">
                 <form method="post" enctype="multipart/form-data">
-
                     <label><strong>Upload Video</strong></label>
                     <div class="custom-file">
                         <div class="row">
@@ -109,24 +108,72 @@
                             </div>
                         </div>
                     </div>
-
-
                 </form>
             </div>
         </div>
         <div class="col-md-4">
-            hello
+            <div class="row">
+                <form method="post" enctype="multipart/form-data">
+                    <label><strong>Go To Frame</strong></label>
+                    <div class="custom-file">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Search" id="frameInput">
+                                    <button class="btn btn-success" type="submit">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="col-md-4">
-            hello
+            <div class="row">
+                <label><strong>Show selected line coordinates:</strong></label>
+                <p id="showLine">123</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <canvas id="phaser3MainView" width="800" height="600"></canvas>
+
+        </div>
+        <div class="col-md-3">
+            <ul>
+                <li>Line 1</li>
+                <li>Line 2</li>
+                <li>Line 3</li>
+                <li>Line 4</li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="row" id="control">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-danger" style="margin-left:21.5em;">Previous</button>
+                </div>
+                <div class="col-md-4">
+                    <label for="customRange1" class="form-label" style="margin-left:12em;">Image Scale</label>
+                    <input type="range" class="form-range" min="0" max="3" id="customRange1" step="0.001" style="margin-left:12em;">
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-success" style="margin-left:21em;">Next</button>
+                </div>
+            </div>
         </div>
     </div>
 
+
+    <img id="baseImg" src="{{ url_for('static', filename='UPLOADS/images/image.jpg') }}">
+
 </div>
 
-
+<script src="{{url_for('static', filename='scripts/engine.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="{{url_for('static', filename='scripts/line.js')}}"></script>
 <script src="{{url_for('static', filename='scripts/bootstrap/bootstrap.js')}}"></script>
 </body>
 </html>
