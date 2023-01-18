@@ -5,8 +5,8 @@ img#baseImg {
     margin-top: 5px;
     margin-bottom: 5px;
 }
-canvas {
- display: block;
+#phaser3MainView {
+ /* display: block;
  margin: 0;
  position: absolute;
  top: 50%;
@@ -14,9 +14,11 @@ canvas {
  transform: translate(-25%, -50%);
  max-width: 100%;
  max-height: 50vw;
+ */
+ border: 10px solid blue;
 }
 
-#control {
+#none {
     margin: 20px;
     position: absolute;
     top: 85%;
