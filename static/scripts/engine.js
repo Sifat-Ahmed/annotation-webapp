@@ -6,26 +6,54 @@ var height = window.innerHeight;
 
 var stage = new Konva.Stage({
     container: 'container',
-    width: width,
-    height: height,
+    width: 800,
+    height: 600,
 });
 
-var layer = new Konva.Layer();
-stage.add(layer);
-
+var backGround = new Konva.Layer();
+var foreGround = new Konva.Layer();
+stage.add(backGround);
+stage.add(foreGround);
 // main API:
+var yoda;
 var imageObj = new Image();
-imageObj.onload = function () {
-var yoda = new Konva.Image({
-  x: 50,
-  y: 50,
-  image: imageObj,
-  width: 106,
-  height: 118,
+
+var group = new Konva.Group();
+
+imageObj.onload = function() {
+    yoda = new Konva.Image({
+    x: 0,
+    y: 0,
+    image: imageObj,
+    width: 800,
+    height: 600,
 });
 
 // add the shape to the layer
-layer.add(yoda);
+backGround.add(yoda);
 };
 
 imageObj.src = mysrc;
+
+var prev = 0;
+var points = [0,0,50,50, 150,100,100,200, 300,300,400,400];
+
+
+var redLine = new Konva.Line({
+    points: points,
+    stroke: 'red',
+    strokeWidth: 5,
+    lineCap: 'round',
+    lineJoin: 'round',
+    draggable: true
+  });
+
+
+foreGround.add(redLine);
+
+console.log(points);
+
+
+
+//yoda.moveDown();
+backGround.zIndex(0);

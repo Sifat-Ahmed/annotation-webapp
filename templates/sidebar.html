@@ -87,7 +87,7 @@
     </ul>
 </div>
 
-<div class="container" id="container">
+<div class="container">
     <img id="baseImg" src="{{ url_for('static', filename='UPLOADS/images/image.jpg') }}">
     <div class="row">
         <div class="col-md-4">
@@ -136,7 +136,8 @@
     </div>
     <div class="row">
         <div class="col-md-9">
-            <canvas id="phaser3MainView" width="800" height="600"></canvas>
+            <!-- <canvas id="phaser3MainView" width="800" height="600"></canvas> -->
+            <div class="container-fluid" id="container"></div>
 
         </div>
         <div class="col-md-3">
@@ -155,11 +156,13 @@
                 <div class="col-md-3">
                     <button type="button" class="btn btn-danger" >Previous</button>
                 </div>
+                <!--
                 <div class="col-md-6">
                     <label for="customRange1" class="form-label" >Image Scale</label>
                     <input type="range" class="form-range" min="0" max="3" id="customRange1" step="0.001">
                 </div>
-                <div class="col-md-3">
+                -->
+                <div class="col-md-3 offset-md-6 justify-content-end">
                     <button type="button" class="btn btn-success" >Next</button>
                 </div>
             </div>
