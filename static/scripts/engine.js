@@ -40,56 +40,93 @@ backGround.add(yoda);
 imageObj.src = mysrc;
 
 var prev = 0;
-var points = [0,0,50,50, 150,100,100,200, 300,300,400,400];
+var points = [];
+
+function writeMessage(message) {
+    text.text('Message ' + message);
+}
+var text = new Konva.Text({
+    x: 10,
+    y: 10,
+    fontFamily: 'Calibri',
+    fontSize: 24,
+    text: '',
+    fill: 'red',
+});
 
 
 
+// dragging a circle
 
-
-
-
-console.log(points);
+//for (var i = 0; i < points.length; i++){
+//    console.log(i);
+//
+//    points[i].on('dragmove', function(){
+//        writeMessage('2. Point '+ i + ' dragging!');
+//        console.log('2. Point '+ i + ' dragging!');
+//    });
+//
+//}
 
 stage.on('click', function (e) {
-        // e.target is a clicked Konva.Shape or current stage if you clicked on empty space
-        console.log('clicked on', e.target);
-//        console.log('usual click on ' + stage.getPointerPosition().x);
-//
-        var x = stage.getPointerPosition().x;
-        var y = stage.getPointerPosition().y;
-        single_line.push({xc: x, yc: y})
 
+    var x = stage.getPointerPosition().x;
+    var y = stage.getPointerPosition().y;
 
+    var circle = new Konva.Circle({
+        x: x,
+        y: y,
+        radius: 4,
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 1,
+        draggable: true
+    });
+    points.push(circle);
+    foreGround.add(circle);
 
+    for (var i = 0; i < points.length; i+=2){
+    //console.log('Point ' + [i] + ' ' + points[i].x() + ' ' + points[i].y());
 
-        all_points.push({xc:x, yc: y});
-
-        if (single_line.length == 2)
-        {
-            lines.push({
-                x0: single_line[0].xc,
-                y0: single_line[0].yc,
-                x1: single_line[1].xc,
-                y1: single_line[1].yc
-            })
-            //console.log(single_line);
-            single_line = [];
-        }
-
-        for (var i = 0; i <lines.length; i++)
-        {
-            var redLine = new Konva.Line({
-            points: [lines[i].x0, lines[i].y0, lines[i].x1, lines[i].y1],
-            stroke: 'red',
-            strokeWidth: 5,
-            lineCap: 'round',
+    if (i+1 < points.length) {
+        var line = new Konva.Line({
+            points: [points[i].x(), points[i].y(), points[i+1].x(), points[i+1].y()],
+            stroke: 'green',
+            strokeWidth: 2,
             lineJoin: 'round',
-            draggable: true
-          });
-          foreGround.add(redLine);
+
+        });
+        foreGround.add(line);
+        lines.push(line);
         }
+    }
+
+//    circle.on('dragmove', function(){
+//        writeMessage('Point '+ i + ' dragging!');
+//        console.log('Point '+ i + ' dragging!');
+//    });
+
+
 
 });
+
+
+for (var j = 0; j < points.length; j++){
+
+    points[j].on('dragmove', function(){
+        console.log('2. Point '+ j + ' ' + points[1].x());
+        writeMessage('2. Point '+ j + ' dragging!');
+        //console.log('Lines', lines.length);
+
+    });
+
+}
+
+var tr = new Konva.Transformer();
+
+foreGround.add(text);
+foreGround.add(tr);
+tr.nodes(points);
 
 //yoda.moveDown();
 backGround.zIndex(0);

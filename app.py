@@ -42,7 +42,7 @@ def upload():
             #return redirect(url_for('show', image=image), code=307)
             #return redirect(request.url)
 
-    image_path = r'static/UPLOADS/images/1.jpg'
+    image_path = r'static/UPLOADS/images/image.jpg'
     return render_template('sidebar.html', image = image_path)
 
 @app.route('/annotate/<file>', methods=['POST'])
