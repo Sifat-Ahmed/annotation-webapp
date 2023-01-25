@@ -88,37 +88,42 @@
 </div>
 
 <div class="container">
+        {% if not data %}
+            <script>alert('Upload a video first to get started');</script>
+        {% endif %}
+
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="row">
                 <form method="post" enctype="multipart/form-data">
                     <label><strong>Upload Video</strong></label>
                     <div class="custom-file">
                         <div class="row">
-                            <div class="col-md-9">
-                                <input type="file" name="file" multiple class="custom-file-input form-control"
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <input type="file" name="file" multiple class="custom-file-input form-control"
                                        id="customFile">
+                                    <button type="submit" name="upload" value="upload" id="upload"
+                                            class="btn btn-block btn-dark"><i class="fa fa-fw fa-upload"></i> Upload
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <button type="submit" name="upload" value="upload" id="upload"
-                                        class="btn btn-block btn-dark"><i class="fa fa-fw fa-upload"></i> Upload
-                                </button>
-                            </div>
+
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="row">
                 <form method="post" enctype="multipart/form-data">
                     <label><strong>Go To Frame</strong></label>
                     <div class="custom-file">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Search" id="frameInput">
-                                    <button class="btn btn-success" type="submit">Go</button>
+                                    <input type="text" class="form-control" name="frameNo" value="{{ data['frame_no'] }}" placeholder="Frame No." min="1" id="frameInput">
+                                    <button class="btn btn-success" name="frameNoSubmit" type="submit">Go</button>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +131,25 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <div class="row">
+                <form method="post" enctype="multipart/form-data">
+                    <label><strong>Resize Frame</strong></label>
+                    <div class="custom-file">
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="heightInput" value=" {{ data['image_height'] }} " placeholder="Height" min="480" id="heightInput">
+                                    <input type="text" class="form-control" name="widthInput" value=" {{ data['image_width'] }} " placeholder="Width" min="864" id="widthInput">
+                                    <button class="btn btn-success" name="sizeSubmit" type="submit">Resize</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3">
             <div class="row">
                 <label><strong>Show selected line coordinates:</strong></label>
                 <p id="showLine">123</p>
@@ -168,7 +191,7 @@
 </div>
 
 <script>
-    var mysrc = "{{ image }}";
+    var mysrc = "{{ data['image_path'] }}";
 </script>
 <script src="{{url_for('static', filename='scripts/fabric/fabric.js')}}"></script>
 <script src="{{url_for('static', filename='scripts/engine.js')}}"></script>

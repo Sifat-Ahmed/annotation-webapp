@@ -1,6 +1,4 @@
-img#baseImg {
-    display: none;
-  }
+
 .btn{
     margin-top: 5px;
     margin-bottom: 5px;
@@ -30,6 +28,14 @@ body {
     margin-bottom: 5px;
 }
 #frameInput {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#heightInput {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#widthInput {
     margin-top: 5px;
     margin-bottom: 5px;
 }
