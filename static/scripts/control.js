@@ -1,4 +1,5 @@
 var isDrawing = false, isDragging = false, isDeleting = false;
+var lineShow = document.getElementById('showLine');
 
 $("#pntBtn").on("click", function(e){pointBtnClicked(e);});
 $("#dragBtn").on("click", function(e){dragBtnClicked(e);});

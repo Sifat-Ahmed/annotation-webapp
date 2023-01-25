@@ -43,34 +43,55 @@ function createLine(options){
     var x = options.e.clientX - canvas._offset.left;
     var y = options.e.clientY - canvas._offset.top;
 
-    var circle = new fabric.Circle({
-        left: x,
-        top: y,
-        fill: 'red',
-        originX: 'center',
-        originY: 'center',
-        hasControls: false,
-        hasBorders: false,
-        lockMovementX: false,
-        lockMovementY: false,
-        radius: 10,
-        hoverCursor: 'default'
-    });
-
-    canvas.add(circle);
+//    var circle = new fabric.Circle({
+//        left: x,
+//        top: y,
+//        fill: 'red',
+//        originX: 'center',
+//        originY: 'center',
+//        hasControls: false,
+//        hasBorders: false,
+//        lockMovementX: false,
+//        lockMovementY: false,
+//        radius: 10,
+//        hoverCursor: 'default'
+//    });
+//
+//    canvas.add(circle);
 
     if (point1 === undefined) {
         point1 = new fabric.Point(x, y)
     } else {
-        canvas.add(new fabric.Line([point1.x, point1.y, x, y], {
-            stroke: 'blue',
-            hasControls: false,
-            hasBorders: false,
-            lockMovementX: false,
-            lockMovementY: false,
-            hoverCursor: 'default'
-        }))
+
+        var line = new fabric.Line([point1.x, point1.y, x, y], {
+            fill: 'red',
+            stroke: 'red',
+            strokeWidth: 2,
+            selectable: false,
+            evented: false,
+        });
+        canvas.add(line);
         point1 = undefined;
+        circle1 = makeCircle(line.get('x1'), line.get('y1'), line);
+        circle2 = makeCircle(line.get('x2'), line.get('y2'), line);
+        canvas.add(circle1);
+        canvas.add(circle2);
     }
 
 }
+
+function makeCircle(left, top, line) {
+    var c = new fabric.Circle({
+      left: left,
+      top: top,
+      strokeWidth: 2,
+      radius: 4,
+      fill: '#fff',
+      stroke: '#666'
+    });
+    c.hasControls = c.hasBorders = false;
+
+    c.line = line;
+
+    return c;
+  }
