@@ -5,6 +5,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </head>
 <body>
@@ -139,8 +140,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="heightInput" value=" {{ data['image_height'] }} " placeholder="Height" min="480" id="heightInput">
-                                    <input type="text" class="form-control" name="widthInput" value=" {{ data['image_width'] }} " placeholder="Width" min="864" id="widthInput">
+                                    <input type="text" class="form-control" name="heightInput" value=" {{ data['image_height'] }} " placeholder="Width" min="640" id="heightInput">
+                                    <input type="text" class="form-control" name="widthInput" value=" {{ data['image_width'] }} " placeholder="Height" min="480" id="widthInput">
                                     <button class="btn btn-success" name="sizeSubmit" type="submit">Resize</button>
                                 </div>
                             </div>
@@ -194,8 +195,9 @@
     var mysrc = "{{ data['image_path'] }}";
 </script>
 <script src="{{url_for('static', filename='scripts/fabric/fabric.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/control.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/actions.js')}}"></script>
 <script src="{{url_for('static', filename='scripts/engine.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{{url_for('static', filename='scripts/bootstrap/bootstrap.js')}}"></script>
 </body>
 </html>
