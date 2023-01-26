@@ -64,6 +64,7 @@ function createLine(options){
     } else {
 
         var line = new fabric.Line([point1.x, point1.y, x, y], {
+            id: 'Line_'+line_number,
             fill: 'red',
             stroke: 'red',
             strokeWidth: 2,
@@ -76,18 +77,24 @@ function createLine(options){
         circle2 = makeCircle(line.get('x2'), line.get('y2'), line);
         canvas.add(circle1);
         canvas.add(circle2);
+
+        line_number += 1;
     }
 
 }
 
 function makeCircle(left, top, line) {
     var c = new fabric.Circle({
-      left: left,
-      top: top,
-      strokeWidth: 2,
-      radius: 4,
-      fill: '#fff',
-      stroke: '#666'
+        left: left,
+        top: top,
+        originX: 'center',
+        originY: 'center',
+        hasControls: false,
+        hasBorders: false,
+        strokeWidth: 2,
+        radius: 4,
+        fill: '#fff',
+        stroke: '#666'
     });
     c.hasControls = c.hasBorders = false;
 

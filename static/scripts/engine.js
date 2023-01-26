@@ -1,14 +1,33 @@
 var canvas = new fabric.Canvas('mainView', {height: 600, width:800});
 
+var line_number = 1;
+var lines = {};
+
 getImageSize(mysrc);
+
+
 
 canvas.on('mouse:down', function (options) {
     if (isDrawing){
         createLine(options);
     }
+    let list = document.getElementById("lineList")
+    list.innerHTML = '';
+    canvas.getObjects().forEach(function(o) {
+      if(String(o.id).includes('Line')) {
 
-    var p = options.target;
-    console.log(p);
+          let li = document.createElement("li");
+          li.setAttribute('id', String(o.id));
+          let btn = document.createElement("button");
+          btn.innerHTML = String(o.id).replace('_', ' ');
+          btn.onclick = function(){
+            console.log(o.x1);
+          };
+          li.appendChild(btn);
+          list.appendChild(li);
+      }
+
+  })
 });
 
 //
@@ -33,8 +52,6 @@ canvas.on('object:moving', function(e) {
     // there are two points on one line. we need to identify first which point has been clicked
     // so try to find the nearest point on line where we have clicked
 
-
-
     distance = Math.sqrt( Math.pow(p.left-p.line.x1, 2) + Math.pow(p.top-p.line.y1, 2))
 
     //console.log(distance);
@@ -45,13 +62,15 @@ canvas.on('object:moving', function(e) {
     }
 
 
+    line_name = p.line.id.replace('_', ' ');
+    lineShow.innerHTML = line_name + ': ' +Math.floor(p.line.x1) + ', ' + Math.floor(p.line.y1) + ', ' + Math.floor(p.line.x2) + ', ' + Math.floor(p.line.y2);
 
-    lineShow.innerHTML = Math.floor(p.line.x1) + ', ' + Math.floor(p.line.y1) + ', ' + Math.floor(p.line.x2) + ', ' + Math.floor(p.line.y2);
-
-
+    p.line.set('stroke', 'green');
     p.line.setCoords();
     p.setCoords();
 
+
+    console.log('Line id', p.line.id);
     canvas.renderAll();
 });
 

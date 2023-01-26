@@ -30,6 +30,8 @@ def upload():
                 image_dict, image_size = get_frames(
                     os.path.join(app.config['UPLOAD_VIDEO_FOLDER'], request.files['file'].filename))
 
+                session['num_frames'] = data_dict['num_frames'] = len(image_dict)
+                session['filename'] = data_dict['filename'] = request.files['file'].filename
                 session['image_height'] = data_dict['image_height'] = image_height = image_size[1]
                 session['image_width'] = data_dict['image_width'] = image_width = image_size[0]
                 session['frame_no'] = data_dict['frame_no'] = 1
@@ -51,8 +53,11 @@ def upload():
             session['frame_no'] = data_dict['frame_no'] = int(jump_to_frame)
 
             image = image_dict[data_dict['frame_no']]
+            data_dict['filename'] = session['filename']
             data_dict['image_height'] = session['image_height']
             data_dict['image_width'] = session['image_width']
+            data_dict['num_frames'] = session['num_frames']
+
 
             image = cv2.resize(image, (int(image_height), int(image_width)))
 
@@ -65,7 +70,7 @@ def upload():
         elif "sizeSubmit" in request.form:
             image_height = request.form.get('heightInput')
             image_width = request.form.get('widthInput')
-
+            data_dict['filename'] = session['filename']
             image = image_dict[session['frame_no']]
             session['image_height'] = data_dict['image_height'] = int(image_height)
             session['image_width'] = data_dict['image_width'] = int(image_width)
@@ -73,6 +78,7 @@ def upload():
             image = cv2.resize(image, (int(image_height), int(image_width)))
 
             data_dict['frame_no'] = session['frame_no']
+            data_dict['num_frames'] = session['num_frames']
 
             cv2.imwrite(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'], str(data_dict['frame_no']) + '.jpg'), image)
             data_dict['image_path'] = os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],

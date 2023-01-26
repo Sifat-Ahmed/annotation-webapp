@@ -87,14 +87,24 @@
         </li>
     </ul>
 </div>
+<div class="sidebar-right">
+    <div class="alert alert-secondary" role="alert">
+        <h4 class="alert-heading"> {{ data['filename'] }} </h4>
+        <hr>
+        <p>Total Frames: {{ data['num_frames'] }}</p>
+        <hr>
+        <ul class="mb-0" id="lineList">
+        </ul>
+    </div>
 
+</div>
 <div class="container">
         {% if not data %}
             <script>alert('Upload a video first to get started');</script>
         {% endif %}
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="row">
                 <form method="post" enctype="multipart/form-data">
                     <label><strong>Upload Video</strong></label>
@@ -132,6 +142,10 @@
                 </form>
             </div>
         </div>
+
+    </div>
+    <div class="row">
+
         <div class="col-md-3">
             <div class="row">
                 <form method="post" enctype="multipart/form-data">
@@ -150,10 +164,10 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="row">
                 <label><strong>Show selected line coordinates:</strong></label>
-                <p id="showLine">123</p>
+                <p id="showLine"></p>
             </div>
         </div>
     </div>
@@ -162,11 +176,7 @@
            <canvas id="mainView"></canvas>
         </div>
         <div class="col-md-3">
-            <ul>
-                <li>Line 1</li>
-                <li>Line 2</li>
-                <li>Line 3</li>
-                <li>Line 4</li>
+            <ul id="lineList1">
             </ul>
         </div>
 
