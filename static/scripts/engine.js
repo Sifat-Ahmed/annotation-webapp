@@ -98,7 +98,7 @@ canvas.on('object:moving', function(e) {
 
 
     line_name = p.line.id.replace('_', ' ');
-    lineShow.innerHTML = line_name + ': ' +Math.floor(p.line.x1) + ', ' + Math.floor(p.line.y1) + ', ' + Math.floor(p.line.x2) + ', ' + Math.floor(p.line.y2);
+    lineShow.value = line_name + ': ' +Math.floor(p.line.x1) + ', ' + Math.floor(p.line.y1) + ', ' + Math.floor(p.line.x2) + ', ' + Math.floor(p.line.y2);
 
     p.line.set('stroke', 'green');
     p.line.setCoords();
