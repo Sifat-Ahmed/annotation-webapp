@@ -14,17 +14,52 @@ canvas.on('mouse:down', function (options) {
     let list = document.getElementById("lineList")
     list.innerHTML = '';
     canvas.getObjects().forEach(function(o) {
-      if(String(o.id).includes('Line')) {
+        console.log(o.id);
+      if(String(o.id).includes('Line') && !String(o.id).includes('Circle')) {
 
-          let li = document.createElement("li");
-          li.setAttribute('id', String(o.id));
-          let btn = document.createElement("button");
-          btn.innerHTML = String(o.id).replace('_', ' ');
-          btn.onclick = function(){
+          //let li = document.createElement("li");
+          //li.setAttribute('id', String(o.id));
+
+          let root = document.createElement("div");
+          root.setAttribute('class', 'row');
+          root.setAttribute('id', String(o.id));
+
+          let div1 = document.createElement("div");
+          div1.setAttribute('class', 'd-grid col-8 mx-auto');
+
+          let btn1 = document.createElement("button");
+          btn1.setAttribute('class', 'btn btn-secondary');
+          btn1.innerHTML = String(o.id).replace('_', ' ');
+          btn1.onclick = function(){
             console.log(o.x1);
           };
-          li.appendChild(btn);
-          list.appendChild(li);
+
+          let div2 = document.createElement("div");
+          div2.setAttribute('class', 'd-grid col-2 mx-auto');
+
+          let btn2 = document.createElement("button");
+          btn2.setAttribute('class', 'btn btn-danger');
+          btn2.innerHTML = 'Del';
+          btn2.onclick = function(btnEvent){
+            canvas.getObjects().forEach(function(e) {
+                if(String(e.id) == ('Circle_1_'+o.id)) {
+                    canvas.remove(e);
+                }
+                if(String(e.id) == ('Circle_2_'+o.id)) {
+                    canvas.remove(e);
+                }
+                document.getElementById(String(o.id)).style.display = "none";
+            });
+            canvas.remove(o);
+            console.log(o);
+            canvas.renderAll();
+          };
+
+          div1.appendChild(btn1);
+          div2.appendChild(btn2);
+          root.appendChild(div1);
+          root.appendChild(div2);
+          list.appendChild(root);
       }
 
   })

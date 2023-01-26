@@ -73,18 +73,23 @@ function createLine(options){
         });
         canvas.add(line);
         point1 = undefined;
-        circle1 = makeCircle(line.get('x1'), line.get('y1'), line);
-        circle2 = makeCircle(line.get('x2'), line.get('y2'), line);
+        circle1 = makeCircle(line.get('x1'), line.get('y1'), line, 1);
+        circle2 = makeCircle(line.get('x2'), line.get('y2'), line, 2);
         canvas.add(circle1);
         canvas.add(circle2);
 
+//        var group = new fabric.Group([circle1, circle2, line],{
+//            id: 'group_'+line_number,
+//        });
+//        canvas.add(group);
         line_number += 1;
     }
 
 }
 
-function makeCircle(left, top, line) {
+function makeCircle(left, top, line, circle_id) {
     var c = new fabric.Circle({
+        id: 'Circle_'+circle_id+'_'+line.id ,
         left: left,
         top: top,
         originX: 'center',

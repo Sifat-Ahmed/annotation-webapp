@@ -91,10 +91,21 @@
     <div class="alert alert-secondary" role="alert">
         <h4 class="alert-heading"> {{ data['filename'] }} </h4>
         <hr>
+        <p>Current Frame: {{ data['frame_no'] }}</p>
         <p>Total Frames: {{ data['num_frames'] }}</p>
         <hr>
-        <ul class="mb-0" id="lineList">
-        </ul>
+
+        <div class="d-grid col-12 mx-auto" >
+            <div id="lineList">
+<!--                <div class="d-grid col-10 mx-auto">-->
+<!--                    <button class="btn btn-primary" type="button">Button 1</button>-->
+<!--                </div>-->
+<!--                <div class="d-grid col-2 mx-auto">-->
+<!--                    <button class="btn btn-primary" type="button">Del</button>-->
+<!--                </div>-->
+            </div>
+        </div>
+
     </div>
 
 </div>
