@@ -178,9 +178,16 @@
         <div class="col-md-6">
             <div class="row">
 
-                <label><strong>Show selected line coordinates:</strong></label>
-<!--                <p id="showLine"></p>-->
-                <input id="showLine" class="form-control" type="text" aria-label="Disabled input example" readonly>
+<!--                <label><strong>Show selected line coordinates:</strong></label>-->
+<!--&lt;!&ndash;                <p id="showLine"></p>&ndash;&gt;-->
+<!--                <input id="showLine" class="form-control" type="text" aria-label="Disabled input example" readonly>-->
+
+                <label for="showLine" class="form-label">Selected Line Coordinates</label>
+                <div class="input-group mb-3 input-group-default">
+                    <span class="input-group-text" id="lineName"></span>
+                    <input id="showLine" type="text" class="form-control" aria-describedby="basic-addon3">
+                </div>
+
             </div>
         </div>
     </div>

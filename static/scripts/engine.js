@@ -37,9 +37,13 @@ canvas.on('mouse:down', function (options) {
           let div2 = document.createElement("div");
           div2.setAttribute('class', 'd-grid col-2 mx-auto');
 
+
+          let icon = document.createElement("span");
+          icon.setAttribute('class', 'delete');
+
           let btn2 = document.createElement("button");
-          btn2.setAttribute('class', 'btn btn-danger');
-          btn2.innerHTML = 'Del';
+          btn2.setAttribute('class', 'btn btn-outline-danger');
+          btn2.appendChild(icon);
           btn2.onclick = function(btnEvent){
             canvas.getObjects().forEach(function(e) {
                 if(String(e.id) == ('Circle_1_'+o.id)) {
@@ -98,7 +102,8 @@ canvas.on('object:moving', function(e) {
 
 
     line_name = p.line.id.replace('_', ' ');
-    lineShow.value = line_name + ': ' +Math.floor(p.line.x1) + ', ' + Math.floor(p.line.y1) + ', ' + Math.floor(p.line.x2) + ', ' + Math.floor(p.line.y2);
+    document.getElementById("lineName").innerHTML = line_name;
+    lineShow.value = Math.floor(p.line.x1) + '; ' + Math.floor(p.line.y1) + '; ' + Math.floor(p.line.x2) + '; ' + Math.floor(p.line.y2);
 
     p.line.set('stroke', 'green');
     p.line.setCoords();

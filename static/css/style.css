@@ -42,7 +42,25 @@ body {
 
 #showLine {
     margin-top: 5px;
+    margin-bottom: 5px;
 }
+#lineName {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.form-label{
+    margin: 0px;
+}
+
+.delete {
+    background: url(https://icons.getbootstrap.com/assets/icons/trash.svg) no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
 
 .sidebar {
   margin: 0;
