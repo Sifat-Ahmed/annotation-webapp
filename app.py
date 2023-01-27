@@ -39,7 +39,7 @@ def upload():
                 image = image_dict[data_dict['frame_no']]
                 cv2.imwrite(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'], str(data_dict['frame_no']) + '.jpg'), image)
                 session['image_path'] = data_dict['image_path'] = os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],
-                                                       str(data_dict['frame_no']) + '.jpg')
+                                                                               str(data_dict['frame_no']) + '.jpg')
 
                 print(data_dict)
                 return render_template('index.html', data=data_dict)
@@ -58,12 +58,11 @@ def upload():
             data_dict['image_width'] = session['image_width']
             data_dict['num_frames'] = session['num_frames']
 
-
             image = cv2.resize(image, (int(image_height), int(image_width)))
 
             cv2.imwrite(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'], str(data_dict['frame_no']) + '.jpg'), image)
             session['image_path'] = data_dict['image_path'] = os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],
-                                                   str(data_dict['frame_no']) + '.jpg')
+                                                                           str(data_dict['frame_no']) + '.jpg')
 
             return render_template('index.html', data=data_dict)
 
