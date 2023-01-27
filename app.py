@@ -4,10 +4,15 @@ from flask import Flask, render_template, flash, request, redirect, url_for, sen
 from werkzeug.utils import secure_filename
 import os
 from export_video import *
+from Utils.utils import *
 
 VIDEO_FOLDER = 'static/UPLOADS/videos'
 IMAGE_FOLDER = 'static/UPLOADS/images'
 ## creating an app reference for flask
+
+clean_dirs(VIDEO_FOLDER)
+clean_dirs(IMAGE_FOLDER)
+
 app = Flask(__name__)
 app.config['UPLOAD_VIDEO_FOLDER'] = VIDEO_FOLDER
 app.config['UPLOAD_IMAGE_FOLDER'] = IMAGE_FOLDER
