@@ -109,7 +109,7 @@
     </div>
 
 </div>
-<div class="container">
+<div class="container-fluid" id="main-container">
         {% if not data %}
             <script>alert('Upload a video first to get started');</script>
         {% endif %}
@@ -165,8 +165,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="heightInput" value=" {{ data['image_height'] }} " placeholder="Width" min="640" id="heightInput">
-                                    <input type="text" class="form-control" name="widthInput" value=" {{ data['image_width'] }} " placeholder="Height" min="480" id="widthInput">
+<!--                                    <input type="number" class="form-control" name="heightInput" value=" {{ data['image_height'] }} " placeholder="Width" min="640" id="heightInput">-->
+                                    <input type="number" class="form-control" name="widthInput" value="{{ data['image_width'] }}" placeholder="Width" min="640" id="widthInput">
                                     <button class="btn btn-success" name="sizeSubmit" type="submit">Resize</button>
                                 </div>
                             </div>
@@ -192,17 +192,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
            <canvas id="mainView"></canvas>
-        </div>
-        <div class="col-md-3">
-            <ul id="lineList1">
-            </ul>
         </div>
 
     </div>
     <div class="row" id="control">
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="row">
                 <div class="col-md-3">
                     <button type="button" class="btn btn-danger" >Previous</button>
@@ -213,7 +209,7 @@
                     <input type="range" class="form-range" min="0" max="3" id="customRange1" step="0.001">
                 </div>
                 -->
-                <div class="col-md-3 offset-md-6 justify-content-end">
+                <div class="col-md-3 offset-md-8 justify-content-end">
                     <button type="button" class="btn btn-success" >Next</button>
                 </div>
             </div>

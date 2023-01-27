@@ -32,8 +32,8 @@ def upload():
 
                 session['num_frames'] = data_dict['num_frames'] = len(image_dict)
                 session['filename'] = data_dict['filename'] = request.files['file'].filename
-                session['image_height'] = data_dict['image_height'] = image_height = image_size[1]
-                session['image_width'] = data_dict['image_width'] = image_width = image_size[0]
+                session['image_height'] = data_dict['image_height'] = image_height = image_size[0]
+                session['image_width'] = data_dict['image_width'] = image_width = image_size[1]
                 session['frame_no'] = data_dict['frame_no'] = 1
 
                 image = image_dict[data_dict['frame_no']]
@@ -67,14 +67,21 @@ def upload():
             return render_template('index.html', data=data_dict)
 
         elif "sizeSubmit" in request.form:
-            image_height = request.form.get('heightInput')
+            #image_height = request.form.get('heightInput')
             image_width = request.form.get('widthInput')
+            print('New entered width is', image_width)
+            estimated_height = (int(image_width) / session['image_width']) * session['image_height']
+            estimated_height = int(estimated_height)
+            data_dict['image_height'] = session['image_height'] = estimated_height
+            data_dict['image_width'] = session['image_width'] = int(image_width)
+
+
             data_dict['filename'] = session['filename']
             image = image_dict[session['frame_no']]
-            session['image_height'] = data_dict['image_height'] = int(image_height)
-            session['image_width'] = data_dict['image_width'] = int(image_width)
+            #session['image_height'] = data_dict['image_height'] = int(image_height)
+            #session['image_width'] = data_dict['image_width'] = int(image_width)
 
-            image = cv2.resize(image, (int(image_height), int(image_width)))
+            image = cv2.resize(image, (int(image_width), int(estimated_height)))
 
             data_dict['frame_no'] = session['frame_no']
             data_dict['num_frames'] = session['num_frames']

@@ -122,3 +122,4 @@ canvas.renderAll();
 
 // Callback: https://stackoverflow.com/questions/12344586/how-to-return-multiple-variables-in-javascript-callback-function
 // http://jsfiddle.net/ry270sw9/ line create and move
+// https://stackoverflow.com/questions/35203019/how-can-i-send-an-ajax-request-on-button-click-from-a-form-with-2-buttons
