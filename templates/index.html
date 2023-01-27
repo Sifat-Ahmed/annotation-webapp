@@ -88,11 +88,17 @@
     </ul>
 </div>
 <div class="sidebar-right">
-    <div class="alert alert-secondary" role="alert">
+    <div class="row">
+        <div class="alert alert-secondary" role="alert">
         <h4 class="alert-heading"> {{ data['filename'] }} </h4>
         <hr>
-        <p>Current Frame: {{ data['frame_no'] }}</p>
+        <p>Current Frame: {{ data['frame_no'] }} </p>
         <p>Total Frames: {{ data['num_frames'] }}</p>
+        <p>Image Width: {{ data['image_width'] }}</p>
+        <p>Image Height: {{ data['image_height'] }}</p>
+            <script>
+                console.log('Image width', {{ data['image_width'] }}, 'Image Height', {{ data['image_height'] }});
+            </script>
         <hr>
 
         <div class="d-grid col-12 mx-auto" >
@@ -106,6 +112,28 @@
             </div>
         </div>
 
+    </div>
+    </div>
+    <div class="row">
+        <div class="alert alert-secondary" role="alert">
+        <h4 class="alert-heading"> {{ data['filename'] }} </h4>
+        <hr>
+        <p>Current Frame: {{ data['frame_no'] }}</p>
+        <p>Total Frames: {{ data['num_frames'] }}</p>
+        <hr>
+
+        <div class="d-grid col-12 mx-auto" >
+            <div id="propList">
+<!--                <div class="d-grid col-10 mx-auto">-->
+<!--                    <button class="btn btn-primary" type="button">Button 1</button>-->
+<!--                </div>-->
+<!--                <div class="d-grid col-2 mx-auto">-->
+<!--                    <button class="btn btn-primary" type="button">Del</button>-->
+<!--                </div>-->
+            </div>
+        </div>
+
+    </div>
     </div>
 
 </div>
@@ -201,7 +229,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-3">
-                    <button type="button" class="btn btn-danger" >Previous</button>
+                    <button type="button" class="btn btn-danger" style="width:100%" >Previous</button>
                 </div>
                 <!--
                 <div class="col-md-6">
@@ -209,13 +237,15 @@
                     <input type="range" class="form-range" min="0" max="3" id="customRange1" step="0.001">
                 </div>
                 -->
-                <div class="col-md-3 offset-md-8 justify-content-end">
-                    <button type="button" class="btn btn-success" >Next</button>
+                <div class="col-md-3 offset-md-3 justify-content-end ">
+                    <button type="button" class="btn btn-success"  style="width:100%">Next</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <script>
     var mysrc = "{{ data['image_path'] }}";
