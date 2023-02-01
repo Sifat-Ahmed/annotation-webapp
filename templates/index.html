@@ -90,17 +90,14 @@
 <div class="sidebar-right">
     <div class="row">
         <div class="alert alert-secondary" role="alert">
-        <h4 class="alert-heading"> {{ data['filename'] }} </h4>
-        <hr>
-        <p>Current Frame: {{ data['frame_no'] }} </p>
-        <p>Total Frames: {{ data['num_frames'] }}</p>
-        <p>Image Width: {{ data['image_width'] }}</p>
-        <p>Image Height: {{ data['image_height'] }}</p>
-            <script>
-                console.log('Image width', {{ data['image_width'] }}, 'Image Height', {{ data['image_height'] }});
-            </script>
-        <hr>
-
+            <h4 class="alert-heading"> {{ data['filename'] }} </h4>
+            <hr>
+            <p>Current Frame: {{ data['frame_no'] }} </p>
+            <p>Total Frames: {{ data['num_frames'] }}</p>
+            <p>Image Width: {{ data['image_width'] }}</p>
+            <p>Image Height: {{ data['image_height'] }}</p>
+            <hr>
+        </div>
         <div class="d-grid col-12 mx-auto" >
             <div id="lineList">
 <!--                <div class="d-grid col-10 mx-auto">-->
@@ -111,16 +108,10 @@
 <!--                </div>-->
             </div>
         </div>
-
-    </div>
     </div>
     <div class="row">
         <div class="alert alert-secondary" role="alert">
-        <h4 class="alert-heading"> {{ data['filename'] }} </h4>
-        <hr>
-        <p>Current Frame: {{ data['frame_no'] }}</p>
-        <p>Total Frames: {{ data['num_frames'] }}</p>
-        <hr>
+        <h4 class="alert-heading"> Properties </h4>
 
         <div class="d-grid col-12 mx-auto" >
             <div id="propList">
@@ -194,7 +185,7 @@
                             <div class="col">
                                 <div class="input-group mb-3">
 <!--                                    <input type="number" class="form-control" name="heightInput" value=" {{ data['image_height'] }} " placeholder="Width" min="640" id="heightInput">-->
-                                    <input type="number" class="form-control" name="widthInput" value="{{ data['image_width'] }}" placeholder="Width" min="640" id="widthInput">
+                                    <input type="number" class="form-control" name="widthInput" value="{{ data['ratio'] }}" step="0.01" placeholder="Ratio 0-2" min="0.0" max="2.0" id="widthInput">
                                     <button class="btn btn-success" name="sizeSubmit" type="submit">Resize</button>
                                 </div>
                             </div>

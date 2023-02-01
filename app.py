@@ -6,8 +6,8 @@ import os
 from export_video import *
 from Utils.utils import *
 
-VIDEO_FOLDER = 'static/UPLOADS/videos'
-IMAGE_FOLDER = 'static/UPLOADS/images'
+VIDEO_FOLDER = 'static//UPLOADS//videos//'
+IMAGE_FOLDER = 'static//UPLOADS//images//'
 ## creating an app reference for flask
 
 clean_dirs(VIDEO_FOLDER)
@@ -41,6 +41,12 @@ def upload():
                 session['image_width'] = data_dict['image_width'] = image_width = image_size[1]
                 session['frame_no'] = data_dict['frame_no'] = 1
 
+                session['original_image_height'] = image_height
+                session['original_image_width'] = image_width
+                data_dict['image_scale'] = session['image_scale'] = 1.0
+                data_dict['ratio'] = session['ratio'] = 1.0
+
+
                 image = image_dict[data_dict['frame_no']]
                 cv2.imwrite(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'], str(data_dict['frame_no']) + '.jpg'), image)
                 session['image_path'] = data_dict['image_path'] = os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],
@@ -62,6 +68,9 @@ def upload():
             data_dict['image_height'] = session['image_height']
             data_dict['image_width'] = session['image_width']
             data_dict['num_frames'] = session['num_frames']
+            data_dict['image_scale'] = session['image_scale']
+            data_dict['ratio'] = session['ratio']
+
 
             image = cv2.resize(image, (data_dict['image_width'], data_dict['image_height']))
 
@@ -73,20 +82,21 @@ def upload():
 
         elif "sizeSubmit" in request.form:
             #image_height = request.form.get('heightInput')
-            image_width = request.form.get('widthInput')
-            print('New entered width is', image_width)
-            estimated_height = (int(image_width) / session['image_width']) * session['image_height']
-            estimated_height = int(estimated_height)
-            data_dict['image_height'] = session['image_height'] = estimated_height
-            data_dict['image_width'] = session['image_width'] = int(image_width)
+            ratio = request.form.get('widthInput')
+            print('New entered width is', ratio)
+            estimated_width = (float(ratio) * session['original_image_width'])
+            estimated_height = (float(ratio) * session['original_image_height'])
+            data_dict['image_height'] = session['image_height'] =  int(estimated_height)
+            data_dict['image_width'] = session['image_width'] = int(estimated_width)
 
+            data_dict['ratio'] = session['ratio'] = float(ratio)
 
             data_dict['filename'] = session['filename']
             image = image_dict[session['frame_no']]
             #session['image_height'] = data_dict['image_height'] = int(image_height)
             #session['image_width'] = data_dict['image_width'] = int(image_width)
 
-            image = cv2.resize(image, (int(image_width), int(estimated_height)))
+            image = cv2.resize(image, (int(estimated_width), int(estimated_height)))
 
             data_dict['frame_no'] = session['frame_no']
             data_dict['num_frames'] = session['num_frames']
