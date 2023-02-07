@@ -17,10 +17,22 @@
 
 }
 
+#lineNameAreaDiv{
+
+  margin-top: 10px;
+
+}
+#lineNameInput{
+  margin-right: 10px;
+}
 
 
 body {
   font-family: "Lato", sans-serif;
+}
+
+.videoDetails > p {
+    margin: 0px;
 }
 
 #customFile {

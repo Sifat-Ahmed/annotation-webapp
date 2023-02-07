@@ -1,6 +1,7 @@
 var canvas = new fabric.Canvas('mainView', { height: 600, width: 800 });
 
 var line_number = 1;
+var arrow_number = 1;
 var lines = [];
 
 getImageSize(mysrc);
@@ -11,13 +12,17 @@ canvas.on('mouse:down', function (options) {
     if (isDrawing) {
         createLine(options);
     }
+    if (isArrow){
+        createArrow(options);
+
+    }
     let list = document.getElementById("lineList")
     list.innerHTML = '';
     let propList = document.getElementById("propList")
     propList.innerHTML = '';
     canvas.getObjects().forEach(function (o) {
         //console.log(o.id);
-        if (String(o.id).includes('Line') && !String(o.id).includes('Circle')) {
+        if ((String(o.id).includes('Line') || String(o.id).includes('Arrow')) && !String(o.id).includes('Circle')) {
 
 
 
@@ -30,6 +35,7 @@ canvas.on('mouse:down', function (options) {
 
             let btn1 = document.createElement("button");
             btn1.setAttribute('class', 'btn btn-secondary');
+            btn1.setAttribute('id', 'btn_' + o.id);
             btn1.innerHTML = String(o.id).replace('_', ' ');
             btn1.onclick = function () {
                 properties(propList, String(o.id).replace('_', ' '));
@@ -39,6 +45,7 @@ canvas.on('mouse:down', function (options) {
                         e.line.set("stroke", "yellow");
                         e.line.set("strokeWidth", 5);
                         line_name = e.line.id.replace('_', ' ');
+                 
                         document.getElementById("lineName").innerHTML = line_name;
                         lineShow.value = Math.floor(e.line.x1) + '; ' + Math.floor(e.line.y1) + '; ' + Math.floor(e.line.x2) + '; ' + Math.floor(e.line.y2);
 
@@ -48,21 +55,33 @@ canvas.on('mouse:down', function (options) {
                     }
                     else {
                         if (e.line != null && e.line.id != selected_line) {
-                            e.line.set("stroke", "red");
-                            e.line.set("strokeWidth", 2);
-                            canvas.renderAll();
+                            for (let i = 0; i < lines.length; i++){
+                                if (e.line.id == lines[i].id){
+                                    e.line.set("stroke", lines[i].color);
+                                    e.line.set("strokeWidth", 2);
+                                    console.log("After coloring", e.line.stroke, e.line.id);
+                                    canvas.renderAll();
+                                }
+                            }
                         }
                     }
-                    //                if(String(e.id) == ('Circle_2_'+o.id)) {
-                    //                    canvas.remove(e);
-                    //                }
-                    //                document.getElementById(String(o.id)).style.display = "none";
                 });
             };
+            btn1.onmouseover = function(){
+                let lineData;
+                for (let i = 0; i < lines.length; i++) {
+                    if (o.id == lines[i].id) {
+                        lineData = lines[i];
+                        break;  
+                    }
+                }
+                
+                document.getElementById("lineDetails").innerHTML = JSON.stringify(lineData, undefined, 4);
+
+            }
 
             let div2 = document.createElement("div");
             div2.setAttribute('class', 'd-grid col-2 mx-auto');
-
 
             let icon = document.createElement("span");
             icon.setAttribute('class', 'delete');
@@ -98,23 +117,27 @@ canvas.on('mouse:down', function (options) {
 
 function properties(propList, line_id) {
     propList.innerHTML = "";
+    
+    let linePropHolderDiv = document.createElement("div");
+
     let root1 = document.createElement("div");
-    root1.setAttribute('class', 'row');
+    root1.setAttribute("class", "row");
     //root.setAttribute('id', String(o.id));
 
     let div3 = document.createElement("div");
     div3.setAttribute('class', 'd-grid col-8 mx-auto');
 
     let div4 = document.createElement("div");
-    div4.setAttribute('class', 'd-grid col-2 mx-auto');
+    div4.setAttribute('class', 'd-grid col-4 mx-auto');
 
 
     let input1 = document.createElement("input");
     input1.setAttribute("type", "color");
     input1.setAttribute("id", "colorPicker");
+    input1.setAttribute("class", "form-control form-control-color");
     input1.value = "#ff0000";
 
-    input1.addEventListener("change", watchColorPicker, false);
+    input1.addEventListener("input", watchColorPicker, false);
 
     function watchColorPicker(event) {
         canvas.getObjects().forEach(function (e) {
@@ -122,29 +145,87 @@ function properties(propList, line_id) {
                 e.set("stroke", event.target.value);
                 for (let i = 0; i < lines.length; i++) {
                     if (e.id == lines[i].id) {
-                        lines[i]["color"] = event.target.value;
+                        lines[i]["color"] = event.target.value;   
                     }
-
-
-                    console.log(e.id + "'s color changed to " + event.target.value);
                     canvas.renderAll();
                 }
             }
         });
     }
 
-
     let label = document.createElement("label");
+    label.setAttribute("class", "d-flex align-items-center");
     label.setAttribute("for", "colorPicker");
-    label.innerHTML = "Choose color for " + line_id;
-
+    label.innerHTML = "Choose color for: " + line_id;
 
     div3.appendChild(label);
     div4.appendChild(input1);
     root1.appendChild(div3);
     root1.appendChild(div4);
 
-    propList.appendChild(root1);
+    linePropHolderDiv.appendChild(root1);
+
+
+    let lineNameAreaDiv = document.createElement("div");
+    lineNameAreaDiv.setAttribute("class", "row");
+    lineNameAreaDiv.setAttribute("id", "lineNameAreaDiv");
+
+    let lineNameHolderDiv = document.createElement("div");
+    lineNameHolderDiv.setAttribute("class", "input-group mb-3 input-group-default");
+
+    let lineNameSpan = document.createElement("span");
+    lineNameSpan.setAttribute("class", "input-group-text");
+    lineNameSpan.setAttribute("id", "showLineNameOnProp");
+    lineNameSpan.innerHTML = "Name for "+ line_id;
+
+    let lineNameInput = document.createElement("input");
+    lineNameInput.setAttribute("id", "lineNameInput");
+    lineNameInput.setAttribute("class", "form-control");
+    lineNameInput.setAttribute("type", "text");
+    lineNameInput.setAttribute("aria-describedby", "basic-addon3");
+
+    let selectedLine;
+
+    for (let i = 0; i < lines.length; i++) {
+        if (line_id.replace(' ', '_') == lines[i].id) {
+            lineNameInput.value = lines[i].name;
+            selectedLine = i;
+            break;  
+        }
+        canvas.renderAll();
+    }
+
+
+    let renameBtn = document.createElement("button");
+    renameBtn.setAttribute('class', 'btn btn-success');
+    renameBtn.innerHTML = "Rename";
+
+    renameBtn.onclick = function(event){
+
+        if (lineNameInput.value == ""){
+            alert("Please write a name");
+        }else{
+            let tempName = lines[selectedLine].name;
+            lines[selectedLine].name = lineNameInput.value;
+            document.getElementById('btn_' + lines[selectedLine].id).innerHTML = lineNameInput.value;
+            document.getElementById("lineName").innerHTML = lineNameInput.value;
+            alert(tempName + " has been renamed to " + lineNameInput.value);
+            
+        }
+
+        
+    };
+
+    
+
+    lineNameHolderDiv.appendChild(lineNameSpan);
+    lineNameHolderDiv.appendChild(lineNameInput);
+
+    lineNameAreaDiv.appendChild(lineNameHolderDiv);
+    linePropHolderDiv.appendChild(lineNameAreaDiv);
+    linePropHolderDiv.appendChild(renameBtn);
+
+    propList.appendChild(linePropHolderDiv);
 }
 
 
@@ -177,8 +258,29 @@ canvas.on('object:moving', function (e) {
     //console.log(distance);
     if (distance < 50) {
         p.line && p.line.set({ 'x1': p.left, 'y1': p.top });
+       
     } else {
         p.line && p.line.set({ 'x2': p.left, 'y2': p.top });
+        //console.log(p.angle);
+
+        if (String(p.id).includes("Arrow")){
+            // recalculate the angles again
+            var x1 = Math.floor(p.line.get('x1')),
+            y1 = Math.floor(p.line.get('y1')),
+            x2 = Math.floor(p.line.get('x2')),
+            y2 = Math.floor(p.line.get('y2')),
+
+            dx = x2 - x1,
+            dy = y2 - y1,
+
+            angle = Math.atan2(dy, dx);
+            angle *= 180 / Math.PI;
+            angle += 90;
+
+            p.angle = angle;
+            canvas.renderAll();
+        }
+
     }
 
 
@@ -192,19 +294,30 @@ canvas.on('object:moving', function (e) {
     clicked_line = p.line;
     canvas.getObjects().forEach(function (o) {
         if (o.line != null && o.line.id != clicked_line.id) {
-            o.line.set("stroke", "red");
-            o.line.set("strokeWidth", 2);
+            for (let i = 0; i < lines.length; i++){
+                if (o.line.id == lines[i].id){
+                    o.line.set("stroke", lines[i].color);
+                    o.line.set("strokeWidth", 2);
+                    // console.log("object selected", o);
+                    canvas.renderAll();
+                }
+            }
         }
         for (let i = 0; i < lines.length; i++) {
             if (clicked_line.id == lines[i].id) {
                 lines[i]["coords"] = {
-                    x1: clicked_line.get('x1'),
-                    y1: clicked_line.get('y1'),
-                    x2: clicked_line.get('x2'),
-                    y2: clicked_line.get('y2'),
+                    x1: Math.floor(clicked_line.get('x1')),
+                    y1: Math.floor(clicked_line.get('y1')),
+                    x2: Math.floor(clicked_line.get('x2')),
+                    y2: Math.floor(clicked_line.get('y2')),
                 };
+                lines[i]["original_coords"] = {
+                    x1: Math.ceil(clicked_line.get('x1') * scale), 
+                    y1: Math.ceil(clicked_line.get('y1') * scale),
+                    x2: Math.ceil(clicked_line.get('x2') * scale),
+                    y2: Math.ceil(clicked_line.get('y2') * scale),
+                }
             }
-
         }
     });
 

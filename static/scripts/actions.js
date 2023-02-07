@@ -88,10 +88,16 @@ function createLine(options) {
             "name": line.id.replace('_', ' '),
             "color": line.stroke,
             "coords": {
-                x1: line.get('x1'),
-                y1: line.get('y1'),
-                x2: line.get('x2'),
-                y2: line.get('y2'),
+                x1: Math.floor(line.get('x1')),
+                y1: Math.floor(line.get('y1')),
+                x2: Math.floor(line.get('x2')),
+                y2: Math.floor(line.get('y2')),
+            },
+            "original_coords": {
+                x1: Math.ceil(line.get('x1') * scale), 
+                y1: Math.ceil(line.get('y1') * scale),
+                x2: Math.ceil(line.get('x2') * scale),
+                y2: Math.ceil(line.get('y2') * scale),
             }
         });
 
@@ -121,9 +127,4 @@ function makeCircle(left, top, line, circle_id) {
     c.line = line;
 
     return c;
-}
-
-function createButtons() {
-
-
 }
