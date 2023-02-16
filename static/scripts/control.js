@@ -1,11 +1,16 @@
-var isDrawing = false, isDragging = false, isArrow = false;
+var isDrawing = false, isDragging = false, isArrow = false, lineArrowName;
 var lineShow = document.getElementById('showLine');
+
+
+var lineHasBeenDrawn = false, arrowHasBeenDrawn = false;
 
 
 $("#pntBtn").on("click", function (e) { pointBtnClicked(e); });
 $("#dragBtn").on("click", function (e) { dragBtnClicked(e); });
 $("#arrowBtn").on("click", function (e) { arrowBtnClicked(e); });
 $("#saveBtn").on("click", function (e) { saveBtnClicked(e); });
+
+
 
 let pntBtn = document.getElementById("pntBtn");
 let dragBtn = document.getElementById("dragBtn");
@@ -42,28 +47,43 @@ function arrowBtnClicked(e) {
 }
 
 function saveBtnClicked(e) {
-    let justImage = "I am trying to imagine a random variable";
+    
+    lineArrowName = document.getElementById("ArrowLineNameInput").value;
+    let data_to_send = [];
 
-    fetch(`${window.origin}/save`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(lines),
-        cache: "no-cache",
-        headers: new Headers({
-            "content-type": "application/json"
-          })
+    data_to_send.push({"name": lineArrowName,
+                        "data": lines});
+    if (lineArrowName == "" )
+    {
+        alert("Please put a name in Name for Lines field");
+    }else if (lines.length != 2){
+        alert("Please draw a line and an arrow");
+    }
+    else{
 
-    }).then(response => {
-        if(response.status == 200){
-            return response.json();
-        } else {
-            // handle this somehow
-        }
-    }).then(json => {
-        alert('Success! ' + JSON.stringify(json))
-    }).catch(error => {
-        alert("There was an issue saving the file");
-    })
+        fetch(`${window.origin}/save`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(data_to_send),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })  
+
+        }).then(response => {
+            if(response.status == 200){
+                return response.json();
+            } else {
+                // handle this somehow
+            }
+        }).then(json => {
+            //response = JSON.parse(json)
+            //alert('Status: ' + json["status"])
+            document.getElementById("savedLines").innerHTML = "<p>line-crossing-"+json["name"]+"="+json["coords"]+";";
+        }).catch(error => {
+            alert("There was an issue saving the file");
+        })
+    }
 }
 
 function ParseResponse(response){

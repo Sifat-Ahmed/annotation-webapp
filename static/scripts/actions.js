@@ -94,7 +94,7 @@ function createLine(options) {
                 y2: Math.floor(line.get('y2')),
             },
             "original_coords": {
-                x1: Math.ceil(line.get('x1') * scale), 
+                x1: Math.ceil(line.get('x1') * scale),
                 y1: Math.ceil(line.get('y1') * scale),
                 x2: Math.ceil(line.get('x2') * scale),
                 y2: Math.ceil(line.get('y2') * scale),
@@ -104,6 +104,7 @@ function createLine(options) {
         console.log(lines);
 
         line_number += 1;
+        lineHasBeenDrawn = true;
     }
 
 }

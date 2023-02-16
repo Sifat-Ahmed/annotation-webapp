@@ -3,19 +3,24 @@ import cv2
 from flask import Flask, render_template, flash, request, jsonify, session
 from werkzeug.utils import secure_filename
 import os
+from pprint import pprint
 from export_video import *
 from Utils.utils import *
 
 VIDEO_FOLDER = 'static//UPLOADS//videos//'
 IMAGE_FOLDER = 'static//UPLOADS//images//'
+ANNOTATIONS_FOLDER = 'static//UPLOADS//annotations//'
+
 ## creating an app reference for flask
 
 clean_dirs(VIDEO_FOLDER)
 clean_dirs(IMAGE_FOLDER)
+clean_dirs(ANNOTATIONS_FOLDER)
 
 app = Flask(__name__)
 app.config['UPLOAD_VIDEO_FOLDER'] = VIDEO_FOLDER
 app.config['UPLOAD_IMAGE_FOLDER'] = IMAGE_FOLDER
+app.config['ANNOTATIONS_FOLDER'] = ANNOTATIONS_FOLDER
 count = 0
 image_height, image_width, jump_to_frame = 0, 0, 1
 image_dict, image_size = None, None
@@ -174,9 +179,50 @@ def upload():
 
 @app.route('/save', methods=['POST'])
 def save():
-    data = request.get_json()
-    print(data)
-    return jsonify({"Status": "Saved"})
+    def get_data(lines_data):
+        all_coords = list() 
+        line_coords = list() 
+        arrow_coords = list()
+        for line in lines_data:
+            if 'Line' in line['id']:
+                line_coords.append(line['original_coords']['x1'])
+                line_coords.append(line['original_coords']['y1'])
+                line_coords.append(line['original_coords']['x2'])
+                line_coords.append(line['original_coords']['y2'])
+            elif 'Arrow' in line['id']:
+                arrow_coords.append(line['original_coords']['x1'])
+                arrow_coords.append(line['original_coords']['y1'])
+                arrow_coords.append(line['original_coords']['x2'])
+                arrow_coords.append(line['original_coords']['y2'])
+        all_coords = line_coords + arrow_coords
+        all_coords = [str(x) for x in all_coords]
+        all_coords = ';'.join(all_coords)
+        return all_coords
+
+
+    def save_data(frame_no, line_str):
+        filename = str(frame_no) + ".txt"
+        save_dir = os.path.join(app.config['ANNOTATIONS_FOLDER'], filename)
+
+        with open(save_dir, 'w') as f:
+            f.write(line_str)
+
+        
+
+    data = request.get_json()[0]
+    line_name = data['name']
+    lines = data['data']
+    coords = get_data(lines)
+
+    print('Data to save for frame',session['frame_no'], 'Where line name:', line_name, 'coordinates', coords)
+    
+    line_to_write = "line-crossing-"+line_name+"="+coords+";"
+
+    save_data(session['frame_no'], line_to_write)
+    
+    return jsonify({"status": "Saved",
+                    "name": line_name,
+                    "coords": coords})
 
 
 if __name__ == '__main__':

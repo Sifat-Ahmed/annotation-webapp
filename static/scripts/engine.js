@@ -6,26 +6,28 @@ var lines = [];
 
 getImageSize(mysrc);
 
-
-
 canvas.on('mouse:down', function (options) {
     if (isDrawing) {
-        createLine(options);
+        if (lineHasBeenDrawn == false){
+            createLine(options);
+        }else{
+            alert("You can draw 1 line only");
+        }
     }
     if (isArrow){
-        createArrow(options);
-
+        if (arrowHasBeenDrawn == false){
+            createArrow(options);
+        }else{
+            alert("You can draw 1 arrow only");
+        }
     }
+    
     let list = document.getElementById("lineList")
     list.innerHTML = '';
     let propList = document.getElementById("propList")
     propList.innerHTML = '';
     canvas.getObjects().forEach(function (o) {
-        //console.log(o.id);
         if ((String(o.id).includes('Line') || String(o.id).includes('Arrow')) && !String(o.id).includes('Circle')) {
-
-
-
             let root = document.createElement("div");
             root.setAttribute('class', 'row');
             root.setAttribute('id', String(o.id));
@@ -45,7 +47,7 @@ canvas.on('mouse:down', function (options) {
                         e.line.set("stroke", "yellow");
                         e.line.set("strokeWidth", 5);
                         line_name = e.line.id.replace('_', ' ');
-                 
+                
                         document.getElementById("lineName").innerHTML = line_name;
                         lineShow.value = Math.floor(e.line.x1) + '; ' + Math.floor(e.line.y1) + '; ' + Math.floor(e.line.x2) + '; ' + Math.floor(e.line.y2);
 
@@ -99,6 +101,12 @@ canvas.on('mouse:down', function (options) {
                     }
                     document.getElementById(String(o.id)).style.display = "none";
                 });
+                if (String(o.id).includes('Line')){
+                    lineHasBeenDrawn = false;
+                }else if (String(o.id).includes('Arrow'))
+                {
+                    arrowHasBeenDrawn = false;
+                }
                 canvas.remove(o);
                 console.log(o);
                 canvas.renderAll();
@@ -112,6 +120,7 @@ canvas.on('mouse:down', function (options) {
         }
 
     })
+    
 });
 
 
@@ -245,88 +254,109 @@ function properties(propList, line_id) {
 //canvas.on('object:modified', objectMovedListener);
 
 canvas.on('object:moving', function (e) {
-    var objType = e.target.get('type');
-    var p = e.target;
-    let clicked_line;
-    //p.line && p.line.set({ 'x1': p.left, 'y1': p.top });
+    if (isDragging){
+        var objType = e.target.get('type');
+        var p = e.target;
+        let clicked_line;
+        //p.line && p.line.set({ 'x1': p.left, 'y1': p.top });
 
-    // there are two points on one line. we need to identify first which point has been clicked
-    // so try to find the nearest point on line where we have clicked
+        // there are two points on one line. we need to identify first which point has been clicked
+        // so try to find the nearest point on line where we have clicked
 
-    distance = Math.sqrt(Math.pow(p.left - p.line.x1, 2) + Math.pow(p.top - p.line.y1, 2))
+        distance = Math.sqrt(Math.pow(p.left - p.line.x1, 2) + Math.pow(p.top - p.line.y1, 2))
 
-    //console.log(distance);
-    if (distance < 50) {
-        p.line && p.line.set({ 'x1': p.left, 'y1': p.top });
-       
-    } else {
-        p.line && p.line.set({ 'x2': p.left, 'y2': p.top });
-        //console.log(p.angle);
+        //console.log(distance);
+        if (distance < 50) {
+            p.line && p.line.set({ 'x1': p.left, 'y1': p.top });
+            canvas.getObjects().forEach(function (o) {
+                if (o.line && String(o.id).includes("Triangle")){
+                    var x1 = Math.floor(o.line.get('x1')),
+                    y1 = Math.floor(o.line.get('y1')),
+                    x2 = Math.floor(o.line.get('x2')),
+                    y2 = Math.floor(o.line.get('y2')),
 
-        if (String(p.id).includes("Arrow")){
-            // recalculate the angles again
-            var x1 = Math.floor(p.line.get('x1')),
-            y1 = Math.floor(p.line.get('y1')),
-            x2 = Math.floor(p.line.get('x2')),
-            y2 = Math.floor(p.line.get('y2')),
+                    dx = x2 - x1,
+                    dy = y2 - y1,
 
-            dx = x2 - x1,
-            dy = y2 - y1,
+                    angle = Math.atan2(dy, dx);
+                    angle *= 180 / Math.PI;
+                    angle += 90;
 
-            angle = Math.atan2(dy, dx);
-            angle *= 180 / Math.PI;
-            angle += 90;
-
-            p.angle = angle;
-            canvas.renderAll();
-        }
-
-    }
-
-
-    line_name = p.line.id.replace('_', ' ');
-    document.getElementById("lineName").innerHTML = line_name;
-    lineShow.value = Math.floor(p.line.x1) + '; ' + Math.floor(p.line.y1) + '; ' + Math.floor(p.line.x2) + '; ' + Math.floor(p.line.y2);
-
-    p.line.set('stroke', 'yellow');
-    p.line.set("strokeWidth", 5);
-
-    clicked_line = p.line;
-    canvas.getObjects().forEach(function (o) {
-        if (o.line != null && o.line.id != clicked_line.id) {
-            for (let i = 0; i < lines.length; i++){
-                if (o.line.id == lines[i].id){
-                    o.line.set("stroke", lines[i].color);
-                    o.line.set("strokeWidth", 2);
-                    // console.log("object selected", o);
+                    o.angle = angle;
                     canvas.renderAll();
                 }
+            });
+        } else {
+            p.line && p.line.set({ 'x2': p.left, 'y2': p.top });
+            //console.log(p.angle);
+
+            if (String(p.id).includes("Arrow")){
+                // recalculate the angles again
+                var x1 = Math.floor(p.line.get('x1')),
+                y1 = Math.floor(p.line.get('y1')),
+                x2 = Math.floor(p.line.get('x2')),
+                y2 = Math.floor(p.line.get('y2')),
+
+                dx = x2 - x1,
+                dy = y2 - y1,
+
+                angle = Math.atan2(dy, dx);
+                angle *= 180 / Math.PI;
+                angle += 90;
+
+                p.angle = angle;
+                canvas.renderAll();
+                
             }
+
         }
-        for (let i = 0; i < lines.length; i++) {
-            if (clicked_line.id == lines[i].id) {
-                lines[i]["coords"] = {
-                    x1: Math.floor(clicked_line.get('x1')),
-                    y1: Math.floor(clicked_line.get('y1')),
-                    x2: Math.floor(clicked_line.get('x2')),
-                    y2: Math.floor(clicked_line.get('y2')),
-                };
-                lines[i]["original_coords"] = {
-                    x1: Math.ceil(clicked_line.get('x1') * scale), 
-                    y1: Math.ceil(clicked_line.get('y1') * scale),
-                    x2: Math.ceil(clicked_line.get('x2') * scale),
-                    y2: Math.ceil(clicked_line.get('y2') * scale),
+        console.log("Dragging", p.id);
+
+
+        line_name = p.line.id.replace('_', ' ');
+        document.getElementById("lineName").innerHTML = line_name;
+        lineShow.value = Math.floor(p.line.x1) + '; ' + Math.floor(p.line.y1) + '; ' + Math.floor(p.line.x2) + '; ' + Math.floor(p.line.y2);
+
+        p.line.set('stroke', 'yellow');
+        p.line.set("strokeWidth", 5);
+
+        clicked_line = p.line;
+        canvas.getObjects().forEach(function (o) {
+            if (o.line != null && o.line.id != clicked_line.id) {
+                for (let i = 0; i < lines.length; i++){
+                    if (o.line.id == lines[i].id){
+                        o.line.set("stroke", lines[i].color);
+                        o.line.set("strokeWidth", 2);
+                        // console.log("object selected", o);
+                        canvas.renderAll();
+                    }
                 }
             }
-        }
-    });
+            for (let i = 0; i < lines.length; i++) {
+                if (clicked_line.id == lines[i].id) {
+                    lines[i]["coords"] = {
+                        x1: Math.floor(clicked_line.get('x1')),
+                        y1: Math.floor(clicked_line.get('y1')),
+                        x2: Math.floor(clicked_line.get('x2')),
+                        y2: Math.floor(clicked_line.get('y2')),
+                    };
+                    lines[i]["original_coords"] = {
+                        x1: Math.ceil(clicked_line.get('x1') * scale), 
+                        y1: Math.ceil(clicked_line.get('y1') * scale),
+                        x2: Math.ceil(clicked_line.get('x2') * scale),
+                        y2: Math.ceil(clicked_line.get('y2') * scale),
+                    }
+                }
+            }
+        });
 
-    p.line.setCoords();
-    p.setCoords();
+        p.line.setCoords();
+        p.setCoords();
 
 
-    //console.log('Line id', p.line.id);
-    canvas.renderAll();
+        //console.log('Line id', p.line.id);
+        canvas.renderAll();
+    }
 });
 
 
