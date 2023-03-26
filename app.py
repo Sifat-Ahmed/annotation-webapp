@@ -50,6 +50,8 @@ def upload():
 
                 session['original_image_height'] = image_height
                 session['original_image_width'] = image_width
+                data_dict['original_image_height'] = session['original_image_height']
+                data_dict['original_image_width'] = session['original_image_width']
                 data_dict['image_scale'] = session['image_scale'] = 1.0
                 data_dict['ratio'] = session['ratio'] = ratio
 
@@ -76,14 +78,15 @@ def upload():
 
             image = image_dict[data_dict['frame_no']]
             data_dict['filename'] = session['filename']
-            data_dict['image_height'] = session['image_height']
-            data_dict['image_width'] = session['image_width']
+            data_dict['image_height'] = (float(session['ratio']) * session['original_image_height'])
+            data_dict['image_width'] = (float(session['ratio']) * session['original_image_width'])
             data_dict['num_frames'] = session['num_frames']
             data_dict['image_scale'] = session['image_scale']
             data_dict['ratio'] = session['ratio']
+            data_dict['original_image_height'] = session['original_image_height']
+            data_dict['original_image_width'] = session['original_image_width']
 
-
-            image = cv2.resize(image, (data_dict['image_width'], data_dict['image_height']))
+            image = cv2.resize(image, (int(data_dict['image_width']), int(data_dict['image_height'])))
 
             cv2.imwrite(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'], str(data_dict['frame_no']) + '.jpg'), image)
             session['image_path'] = data_dict['image_path'] = os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],
@@ -103,14 +106,15 @@ def upload():
 
             image = image_dict[data_dict['frame_no']]
             data_dict['filename'] = session['filename']
-            data_dict['image_height'] = session['image_height']
-            data_dict['image_width'] = session['image_width']
+            data_dict['image_height'] = (float(session['ratio']) * session['original_image_height'])
+            data_dict['image_width'] = (float(session['ratio']) * session['original_image_width'])
             data_dict['num_frames'] = session['num_frames']
             data_dict['image_scale'] = session['image_scale']
             data_dict['ratio'] = session['ratio']
+            data_dict['original_image_height'] = session['original_image_height']
+            data_dict['original_image_width'] = session['original_image_width']
 
-
-            image = cv2.resize(image, (data_dict['image_width'], data_dict['image_height']))
+            image = cv2.resize(image, (int(data_dict['image_width']), int(data_dict['image_height'])))
 
             cv2.imwrite(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'], str(data_dict['frame_no']) + '.jpg'), image)
             session['image_path'] = data_dict['image_path'] = os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],
@@ -131,14 +135,15 @@ def upload():
 
             image = image_dict[data_dict['frame_no']]
             data_dict['filename'] = session['filename']
-            data_dict['image_height'] = session['image_height']
-            data_dict['image_width'] = session['image_width']
+            data_dict['image_height'] = (float(session['ratio']) * session['original_image_height'])
+            data_dict['image_width'] = (float(session['ratio']) * session['original_image_width'])
             data_dict['num_frames'] = session['num_frames']
             data_dict['image_scale'] = session['image_scale']
             data_dict['ratio'] = session['ratio']
+            data_dict['original_image_height'] = session['original_image_height']
+            data_dict['original_image_width'] = session['original_image_width']
 
-
-            image = cv2.resize(image, (data_dict['image_width'], data_dict['image_height']))
+            image = cv2.resize(image, (int(data_dict['image_width']), int(data_dict['image_height'])))
 
             cv2.imwrite(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'], str(data_dict['frame_no']) + '.jpg'), image)
             session['image_path'] = data_dict['image_path'] = os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],
@@ -153,8 +158,8 @@ def upload():
             print('New entered width is', ratio)
             estimated_width = (float(ratio) * session['original_image_width'])
             estimated_height = (float(ratio) * session['original_image_height'])
-            data_dict['image_height'] = session['image_height'] =  int(estimated_height)
-            data_dict['image_width'] = session['image_width'] = int(estimated_width)
+            data_dict['image_height'] = (float(session['ratio']) * session['original_image_height'])
+            data_dict['image_width'] = (float(session['ratio']) * session['original_image_width'])
 
             data_dict['ratio'] = session['ratio'] = float(ratio)
 
@@ -162,7 +167,8 @@ def upload():
             image = image_dict[session['frame_no']]
             #session['image_height'] = data_dict['image_height'] = int(image_height)
             #session['image_width'] = data_dict['image_width'] = int(image_width)
-
+            data_dict['original_image_height'] = session['original_image_height']
+            data_dict['original_image_width'] = session['original_image_width']
             image = cv2.resize(image, (int(estimated_width), int(estimated_height)))
 
             data_dict['frame_no'] = session['frame_no']
@@ -184,17 +190,18 @@ def save():
         line_coords = list() 
         arrow_coords = list()
         for line in lines_data:
-            if 'Line' in line['id']:
-                line_coords.append(line['original_coords']['x1'])
-                line_coords.append(line['original_coords']['y1'])
-                line_coords.append(line['original_coords']['x2'])
-                line_coords.append(line['original_coords']['y2'])
-            elif 'Arrow' in line['id']:
+            if 'Arrow' in line['id']:
                 arrow_coords.append(line['original_coords']['x1'])
                 arrow_coords.append(line['original_coords']['y1'])
                 arrow_coords.append(line['original_coords']['x2'])
                 arrow_coords.append(line['original_coords']['y2'])
-        all_coords = line_coords + arrow_coords
+            elif 'Line' in line['id']:
+                line_coords.append(line['original_coords']['x1'])
+                line_coords.append(line['original_coords']['y1'])
+                line_coords.append(line['original_coords']['x2'])
+                line_coords.append(line['original_coords']['y2'])
+            
+        all_coords = arrow_coords + line_coords
         all_coords = [str(x) for x in all_coords]
         all_coords = ';'.join(all_coords)
         return all_coords

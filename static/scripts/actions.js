@@ -121,7 +121,8 @@ function makeCircle(left, top, line, circle_id) {
         strokeWidth: 2,
         radius: 8,
         fill: '#fff',
-        stroke: '#666'
+        stroke: '#666',
+        selectable: false,
     });
     c.hasControls = c.hasBorders = false;
 

@@ -15,11 +15,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Annotation Helper</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
     </nav>
@@ -37,21 +33,7 @@
                     <span class="visually-hidden">Button</span>
                 </button>
             </li>
-            <li>
-                <button type="button" id="zoomBtn" class="btn btn-outline-success"
-                    title="Zoom Tool: Use it to Zoom in or Zoom out">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-zoom-in" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
-                        <path
-                            d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z" />
-                        <path fill-rule="evenodd"
-                            d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5z" />
-                    </svg>
-                    <span class="visually-hidden">Button</span>
-                </button>
-            </li>
+            
             </br>
             ...
             </br>
@@ -90,8 +72,8 @@
                 <div class="videoDetails">
                     <p>Current Frame: {{ data['frame_no'] }} </p>
                     <p>Total Frames: {{ data['num_frames'] }}</p>
-                    <p>Image Width: {{ data['image_width'] }}</p>
-                    <p>Image Height: {{ data['image_height'] }}</p>
+                    <p>Image Width: {{ data['original_image_width'] }}</p>
+                    <p>Image Height: {{ data['original_image_height'] }}</p>
                 </div>
                 <hr>
             </div>
@@ -130,7 +112,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
             <div class="alert alert-secondary" role="alert">
                 <h4 class="alert-heading"> Details </h4>
 
@@ -141,7 +123,7 @@
                 </div>
 
             </div>
-        </div>
+        </div> -->
 
     </div>
     <div class="container-fluid" id="main-container">
@@ -191,6 +173,27 @@
                     </form>
                 </div>
             </div>
+            {% else %}
+            <div class="col-md-3">
+                <div class="row">
+                    <form method="post" enctype="multipart/form-data">
+                        <label><strong>Go To Frame</strong></label>
+                        <div class="custom-file">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <input type="number" class="form-control" name="frameNo"
+                                            value="{{ data['frame_no'] }}" placeholder="Frame No." min="1"
+                                            max="{{ data['num_frames'] }}" id="frameInput" disabled>
+                                        <button class="btn btn-success" name="frameNoSubmit" type="submit"
+                                            disabled>Go</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             {% endif %}
 
         </div>
@@ -223,8 +226,54 @@
                         <div class="row">
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="ArrowLineNameInput"
-                                        value="">
+                                    <input type="text" class="form-control" id="ArrowLineNameInput" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <label for="showLine" class="form-label">Selected Line Coordinates</label>
+                    <div class="input-group mb-3 input-group-default">
+                        <span class="input-group-text" id="lineName"></span>
+                        <input id="showLine" type="text" class="form-control" aria-describedby="basic-addon3" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row">
+                    <form method="post" enctype="multipart/form-data">
+                        <label><strong>Resize Frame</strong></label>
+                        <div class="custom-file">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <!--                                    <input type="number" class="form-control" name="heightInput" value=" {{ data['image_height'] }} " placeholder="Width" min="640" id="heightInput">-->
+                                        <input type="number" class="form-control" name="widthInput"
+                                            value="{{ data['ratio'] }}" step="0.01" placeholder="Ratio 0-2" min="0.0"
+                                            max="2.0" id="widthInput" disabled>
+                                        <button class="btn btn-success" name="sizeSubmit" type="submit"
+                                            disabled>Resize</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <label><strong>Name for Lines</strong></label>
+                    <div class="custom-file">
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="ArrowLineNameInput" value="" disabled>
                                 </div>
                             </div>
                         </div>
@@ -259,6 +308,11 @@
                             <button type="submit" class="btn btn-danger" name="prevFramebtn"
                                 style="width:100%">Previous</button>
                         </form>
+                        {% else %}
+                        <div class="col">
+                            <button type="submit" class="btn btn-secondary" name="prevFramebtn" style="width:100%"
+                                disabled>Previous</button>
+                        </div>
                         {% endif %}
                     </div>
                     <div class="col-md-3 offset-md-3 justify-content-end ">
@@ -270,6 +324,11 @@
                                     style="width:100%">Next</button>
                             </div>
                             </form>
+                            {% else %}
+                            <div class="col">
+                                <button type="submit" class="btn btn-secondary" name="nextFramebtn" style="width:100%"
+                                    disabled>Next</button>
+                            </div>
                             {% endif %}
                     </div>
                 </div>

@@ -24,6 +24,8 @@ function pointBtnClicked(e) {
     pntBtn.classList.add("active");
     dragBtn.classList.remove("active");
     arrowBtn.classList.remove("active");
+
+    disable_all();
 }
 
 function dragBtnClicked(e) {
@@ -34,6 +36,8 @@ function dragBtnClicked(e) {
     pntBtn.classList.remove("active");
     dragBtn.classList.add("active");
     arrowBtn.classList.remove("active");
+
+    enable_all();
 }
 
 function arrowBtnClicked(e) {
@@ -47,19 +51,24 @@ function arrowBtnClicked(e) {
 }
 
 function saveBtnClicked(e) {
-    
+
     lineArrowName = document.getElementById("ArrowLineNameInput").value;
     let data_to_send = [];
 
-    data_to_send.push({"name": lineArrowName,
-                        "data": lines});
-    if (lineArrowName == "" )
-    {
+    console.log(lines);
+
+    data_to_send.push({
+        "name": lineArrowName,
+        "data": lines
+    });
+
+    console.log("Line array", lines);
+    if (lineArrowName == "") {
         alert("Please put a name in Name for Lines field");
-    }else if (lines.length != 2){
+    } else if (lines.length != 2) {
         alert("Please draw a line and an arrow");
     }
-    else{
+    else {
 
         fetch(`${window.origin}/save`, {
             method: "POST",
@@ -68,10 +77,10 @@ function saveBtnClicked(e) {
             cache: "no-cache",
             headers: new Headers({
                 "content-type": "application/json"
-            })  
+            })
 
         }).then(response => {
-            if(response.status == 200){
+            if (response.status == 200) {
                 return response.json();
             } else {
                 // handle this somehow
@@ -79,17 +88,45 @@ function saveBtnClicked(e) {
         }).then(json => {
             //response = JSON.parse(json)
             //alert('Status: ' + json["status"])
-            document.getElementById("savedLines").innerHTML = "<p>line-crossing-"+json["name"]+"="+json["coords"]+";";
+            document.getElementById("savedLines").innerHTML = "<p>line-crossing-" + json["name"] + "=" + json["coords"] + ";";
         }).catch(error => {
             alert("There was an issue saving the file");
         })
     }
 }
 
-function ParseResponse(response){
+function ParseResponse(response) {
     return response.json();
 }
 
-function ParseResponse(data){
+function ParseResponse(data) {
     alert(data.result);
 }
+
+
+
+function disable_all() {
+    canvas.getObjects().forEach(function (e) {
+        if (String(e.id).includes('Line') || String(e.id).includes('Arrow')) {
+            e['selectable'] = false;
+            console.log('disabled');
+        }
+    })
+}
+
+
+function enable_all() {
+    canvas.getObjects().forEach(function (e) {
+        if (String(e.id).includes('Circle') || String(e.id).includes('Triangle')) {
+            e['selectable'] = true;
+        }
+    })
+}
+
+canvas.on('selection:created', (e) => {
+    if(e.target.type === 'activeSelection') {
+      canvas.discardActiveObject();
+    } else {
+      //do nothing
+    }
+  })
