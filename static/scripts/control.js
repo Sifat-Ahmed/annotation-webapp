@@ -5,10 +5,10 @@ var lineShow = document.getElementById('showLine');
 var lineHasBeenDrawn = false, arrowHasBeenDrawn = false;
 
 
-$("#pntBtn").on("click", function (e) { pointBtnClicked(e); });
-$("#dragBtn").on("click", function (e) { dragBtnClicked(e); });
-$("#arrowBtn").on("click", function (e) { arrowBtnClicked(e); });
-$("#saveBtn").on("click", function (e) { saveBtnClicked(e); });
+$("#pntBtn").on("click", function (e) { pointBtnClicked(); });
+$("#dragBtn").on("click", function (e) { dragBtnClicked(); });
+$("#arrowBtn").on("click", function (e) { arrowBtnClicked(); });
+$("#saveBtn").on("click", function (e) { saveBtnClicked(); });
 
 
 
@@ -16,7 +16,7 @@ let pntBtn = document.getElementById("pntBtn");
 let dragBtn = document.getElementById("dragBtn");
 let arrowBtn = document.getElementById("arrowBtn");
 
-function pointBtnClicked(e) {
+function pointBtnClicked() {
     isDrawing = true;
     isDragging = false;
     isArrow = false;
@@ -28,7 +28,7 @@ function pointBtnClicked(e) {
     disable_all();
 }
 
-function dragBtnClicked(e) {
+function dragBtnClicked() {
     isDrawing = false;
     isDragging = true;
     isArrow = false;
@@ -40,7 +40,7 @@ function dragBtnClicked(e) {
     enable_all();
 }
 
-function arrowBtnClicked(e) {
+function arrowBtnClicked() {
     isDrawing = false;
     isDragging = false;
     isArrow = true;
@@ -50,7 +50,7 @@ function arrowBtnClicked(e) {
     arrowBtn.classList.add("active");
 }
 
-function saveBtnClicked(e) {
+function saveBtnClicked() {
 
     lineArrowName = document.getElementById("ArrowLineNameInput").value;
     let data_to_send = [];
@@ -122,11 +122,3 @@ function enable_all() {
         }
     })
 }
-
-canvas.on('selection:created', (e) => {
-    if(e.target.type === 'activeSelection') {
-      canvas.discardActiveObject();
-    } else {
-      //do nothing
-    }
-  })

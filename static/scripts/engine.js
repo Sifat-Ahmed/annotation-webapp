@@ -30,7 +30,7 @@ canvas.on('mouse:down', function (options) {
         if ((String(o.id).includes('Line') || String(o.id).includes('Arrow')) && !String(o.id).includes('Circle')) {
             let root = document.createElement("div");
             root.setAttribute('class', 'row');
-            root.setAttribute('id', String(o.id));
+            root.setAttribute('id', 'row_'+String(o.id));
 
             let div1 = document.createElement("div");
             div1.setAttribute('class', 'd-grid col-8 mx-auto');
@@ -40,16 +40,19 @@ canvas.on('mouse:down', function (options) {
             btn1.setAttribute('id', 'btn_' + o.id);
             btn1.innerHTML = String(o.id).replace('_', ' ');
             btn1.onclick = function () {
+                dragBtnClicked();
                 properties(propList, String(o.id).replace('_', ' '));
                 let selected_line;
                 canvas.getObjects().forEach(function (e) {
-                    if (String(e.id) == ('Circle_1_' + o.id)) {
+                   
+                    if (String(e.id) == ('Circle_1_' + o.id) || String(e.id) == ('Circle_Triangle_1_' + o.id)) {
+                        console.log("clicked",e.id, o.id);
                         e.line.set("stroke", "yellow");
                         e.line.set("strokeWidth", 5);
                         line_name = e.line.id.replace('_', ' ');
 
                         document.getElementById("lineName").innerHTML = line_name;
-                        lineShow.value = Math.floor(e.line.x1 * scale)+1 + '; ' + Math.floor(e.line.y1 * scale)+1 + '; ' + Math.floor(e.line.x2 * scale)+1 + '; ' + Math.floor(e.line.y2 * scale)+1;
+                        lineShow.value = parseInt(Math.floor(e.line.x1 * scale)+1) + '; ' + parseInt(Math.floor(e.line.y1 * scale)+1) + '; ' + parseInt(Math.floor(e.line.x2 * scale)+1) + '; ' + (Math.floor(e.line.y2 * scale)+1);
 
                         canvas.renderAll();
                         selected_line = e.line.id;
@@ -166,10 +169,21 @@ function properties(propList, line_id) {
 
     let input1 = document.createElement("input");
     input1.setAttribute("type", "color");
-    input1.setAttribute("id", "colorPicker");
+    input1.setAttribute("id", String(line_id).replace(' ', '_'));
     input1.setAttribute("class", "form-control form-control-color");
-    input1.value = "#ff0000";
+    // input1.value = "#ff0000";
 
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].id == String(line_id).replace(' ', '_')) {
+            input1.value = lines[i].color;
+        }
+        canvas.renderAll();
+    }
+    
+    
+    
+    
+    
     input1.addEventListener("input", watchColorPicker, false);
 
     function watchColorPicker(event) {
@@ -179,6 +193,7 @@ function properties(propList, line_id) {
                 for (let i = 0; i < lines.length; i++) {
                     if (e.id == lines[i].id) {
                         lines[i]["color"] = event.target.value;
+                        event.target.value = lines[i].color;
                     }
                     canvas.renderAll();
                 }
@@ -332,7 +347,7 @@ canvas.on('object:moving', function (e) {
 
         line_name = p.line.id.replace('_', ' ');
         document.getElementById("lineName").innerHTML = line_name;
-        lineShow.value = Math.floor(p.line.x1 * scale)+1 + '; ' + Math.floor(p.line.y1 * scale)+1 + '; ' + Math.floor(p.line.x2 * scale)+1 + '; ' + Math.floor(p.line.y2 * scale)+1;
+        lineShow.value = parseInt(Math.floor(p.line.x1 * scale)+1) + '; ' + parseInt(Math.floor(p.line.y1 * scale)+1) + '; ' + parseInt(Math.floor(p.line.x2 * scale)+1) + '; ' + parseInt(Math.floor(p.line.y2 * scale)+1);
 
         p.line.set('stroke', 'yellow');
         p.line.set("strokeWidth", 5);
