@@ -20,8 +20,30 @@ webapp
 <br>
 
 ### Installation
+
 ***
-1. First create a virtual environment using PIP (For **Windows** system)
+#### Instaling FFMPEG
+
+1. ffmpeg-python is a wrapper package that runs ffmpeg from CLI with subprocess, so you need to download the main body separately and pass it through the PATH.
+
+2. Download the installer from the official site https://github.com/BtbN/FFmpeg-Builds/releases **ffmpeg-master-latest-win64-gp.zip** and
+
+![image](DocImages/ffmpeg.png)
+
+3. Expand the compressed file you dropped into an appropriate folder, and copy the PATH to the bin folder.
+
+![image](DocImages/extract.png)
+
+4. Add the copied path to PATH variable
+
+![image](DocImages/path.png)
+
+5. Now verify by running ffmpeg in terminal
+
+![image](DocImages/verify.png)
+
+***
+6.First create a virtual environment using PIP (For **Windows** system)
 - if pip is not up-to-date
 ```
 python -m pip install --upgrade pip                 # upgrade pip
@@ -37,7 +59,7 @@ python -m venv env                                  #(env is the name of the env
 ```
 - now install the dependencies
 ```
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 if the installation is successful now you can run the code.
@@ -50,3 +72,6 @@ if the installation is successful now you can run the code.
 ```
 python app.py
 ```
+
+
+The whole process has been verified multiple times in Windows 10, and Windows 11 device.

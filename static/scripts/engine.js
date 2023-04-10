@@ -103,7 +103,7 @@ canvas.on('mouse:down', function (options) {
                     if (String(e.id) == ('Circle_Triangle_1_' + o.id)) {
                         canvas.remove(e);
                     }
-                    document.getElementById(String(o.id)).style.display = "none";
+                    document.getElementById("row_"+String(o.id)).style.display = "none";
                 });
                 if (String(o.id).includes('Line')) {
                     lineHasBeenDrawn = false;
@@ -171,11 +171,12 @@ function properties(propList, line_id) {
     input1.setAttribute("type", "color");
     input1.setAttribute("id", String(line_id).replace(' ', '_'));
     input1.setAttribute("class", "form-control form-control-color");
-    // input1.value = "#ff0000";
+    input1.value = "#ff0000";
 
     for (let i = 0; i < lines.length; i++) {
         if (lines[i].id == String(line_id).replace(' ', '_')) {
-            input1.value = lines[i].color;
+            if (lines[i].color)  input1.value = lines[i].color;
+            else input1.value = "#ff0000";
         }
         canvas.renderAll();
     }
